@@ -1,0 +1,9 @@
+#conteudoEsquerda .collection{
+	margin: unset;
+}
+#menuItemAulas
+{
+	background-color: #778877;
+    color: #eeffee;
+    background: linear-gradient(#99a699,#778877);
+}

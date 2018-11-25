@@ -1,0 +1,55 @@
+tr.balaoRowAtividade{
+	border:none !important;
+	border-radius:5px;
+	cursor:pointer;
+}
+.tituloCirculo
+{
+	
+}
+#menuItemHome
+{
+    color: #eeffee;
+    background: #778877 linear-gradient(#99a699, #778877);
+}
+
+.circulo
+{
+    background-color: blue;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 20px 50px;
+}
+/* .circulo:hover */
+/* { */
+/* 	box-shadow: 5px 8px 33px -9px; */
+/* 	cursor: pointer; */
+/* } */
+#containerFlexCirculos
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#containerProgressos *
+{
+    box-sizing: initial;
+}
+#containerProgressos
+{
+	padding: 5px;
+}
+#containerProgressos>div
+{
+	margin: 2px;
+}
+#containerProximasAtividades
+{
+	margin: 10px;
+}
+#containerProximasAtividades td
+{
+	padding: 5px 2px;
+}

@@ -1,0 +1,55 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/template.xhtml">
+
+	<ui:define name="estilos">
+		<link type="text/css" rel="stylesheet" href="../style/anotacoes.css" media="screen,projection" />
+	</ui:define>
+	
+	<ui:define name="titulo">Saara - Atividades</ui:define>
+	
+	<ui:define name="conteudoEsquerda">
+		<div class="row">
+	    	<div class="col s12">
+	      		<ul class="tabs">
+		        	<li class="tab col s6"><a href="#abaTodas">Todas</a></li>
+		        	<li class="tab col s6"><a class="active" href="#abaMaterias">Por Matéria</a></li>
+		      	</ul>
+		    </div>
+		    <div id="abaTodas" class="col s12">		    
+			     <div class="input-field col s12">
+		          <textarea placeHolder="Texto de anotação" id="textAreaTodas" class="materialize-textarea"></textarea>
+		          
+		        </div>        
+		    </div>
+		    <div id="abaMaterias" class="col s12">		    
+			     <div class="input-field col s12">
+		          <textarea placeHolder="Texto de anotação" id="textAreaAulas" class="materialize-textarea"></textarea>
+		          
+		        </div> 
+	        </div>
+		  </div>
+	</ui:define>
+	<ui:define name="conteudoDireita">
+		<div class="row">
+			<div class="col s12">
+				<label>Aulas:</label>
+				<a class="waves-effect waves-light btn-small right  modal-trigger" href="#modalAdicionarAula"><i class="material-icons left">add</i>Adicionar</a>
+			</div>
+			<div class="col s12">
+				<div class="collection">
+	        		<a href="#!" class="collection-item">Aula1</a>
+			        <a href="#!" class="collection-item active">Aula2</a>
+			        <a href="#!" class="collection-item">Aula3</a>
+			        <a href="#!" class="collection-item">Aula4</a>
+		      	</div>
+			</div>
+		</div>
+	</ui:define>
+	
+</ui:composition>
+	
+

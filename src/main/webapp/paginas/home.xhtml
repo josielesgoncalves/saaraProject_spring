@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/template.xhtml">
+
+	<ui:define name="estilos">
+		<link type="text/css" rel="stylesheet" href="../style/home.css" media="screen,projection" />
+	</ui:define>
+	
+	<ui:define name="titulo">Saara - Home</ui:define>
+	<ui:define name="conteudoEsquerda">
+		<div id="containerFlexCirculos">
+			<ui:repeat value="#{testeController.listaTeste}" var="value">
+				
+				<div class="circulo waves-effect waves-light hoverable center-align modal-trigger" href="#modalMateria">
+			    	<label class="tituloCirculo">#{value}</label>
+			    </div>
+				
+			</ui:repeat>
+		 	
+		</div>
+		
+		<!-- Modal Structure -->
+		<h:form id="formModalMateria" prependId="false">
+			<div id="modalMateria" class="modal">
+	   			<div class="modal-content">
+		     		<h4>Modal Header</h4>
+		     		<p>A bunch of text</p>
+			   	</div>
+			   	<div class="modal-footer">
+			     	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+			   	</div>
+		 	</div>
+		</h:form>
+		
+	</ui:define>
+	<ui:define name="conteudoDireita">
+		<div id="containerProgressos">
+			<label>Progressos:</label>
+			<ui:repeat value="#{testeController.dadosProgresso.entrySet().toArray()}" var="entry">
+			    <p:progressBar value="#{entry.value}" labelTemplate="#{entry.key} - #{entry.value}%" displayOnly="true" styleClass="animated"/>
+			</ui:repeat>
+		</div>
+		
+		<div id="containerProximasAtividades">
+			<h:form id="formProximasAtividades" prependId="false">
+				<label>Próximas Atividades:</label>
+				
+				<a class="waves-effect waves-light btn-small right  modal-trigger" href="#modalMateria"><i class="material-icons left">add</i>Adicionar</a>
+				
+				<table style="width:100%">
+					<tbody>
+						<ui:repeat value="#{testeController.atividades}" var="atividade">
+							<tr class="hoverable modal-trigger balaoRowAtividade" href="#modalMateria">
+								<td class="logo">
+						            <i class="material-icons">assignment</i>
+					            </td>
+								<td class="detail">
+									<div id="" class="ui-outputpanel ui-widget">
+										<table>
+											<tbody>
+												<tr>
+													<td><h:outputText value="Materia: "/></td>
+													<td><h:outputText value="{atividade.materia.nome}"/></td>
+												</tr>
+												<tr>
+													<td><h:outputText value="Data:" /></td>
+													<td><h:outputText value="#{atividade.data.toString()}"/></td>
+												</tr>
+												<tr>
+													<td><h:outputText value="Tipo:" /></td>
+													<td><h:outputText value="#{atividade.tipo}"/></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</td>
+							</tr>
+							
+						</ui:repeat>
+					</tbody>
+				</table>
+			</h:form>
+		</div>
+	</ui:define>
+	
+</ui:composition>

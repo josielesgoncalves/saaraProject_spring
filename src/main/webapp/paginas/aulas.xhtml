@@ -1,0 +1,126 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/template.xhtml">
+
+	<ui:define name="estilos">
+		<link type="text/css" rel="stylesheet" href="../style/aulas.css" media="screen,projection" />
+	</ui:define>
+	
+	<ui:define name="titulo">Saara - Atividades</ui:define>
+	
+	<ui:define name="conteudoEsquerda">
+		<div class="row">
+		    <form class="col s12">
+				<div class="row">
+   					<div class="input-field col s6">
+        				<input id="first_name" type="text" class="validate"/>
+       					<label for="first_name">Aula</label>
+      				</div>
+      				<div class="input-field col s6">
+        				<input id="last_name" type="text" class="validate"/>
+        				<label for="last_name">Professor</label>
+      				</div>
+      				<div class="input-field col s12">
+      					<label for="horarioAula">Horário da aula</label>
+      					<input id="horarioAula" type="text" class="timepicker"/>
+      				</div>
+      				
+		  			<div class="input-field col s12">
+					   	<select multiple="multiple">
+				     		<option value="" disabled="disabled">Escolha os dias da semana</option>
+				     		<option value="1">Segunda</option>
+					     	<option value="2">Terça</option>
+					     	<option value="3">Quarta</option>
+					     	<option value="4">Quinta</option>
+					     	<option value="5">Sexta</option>
+					     	<option value="6">Sábado</option>
+					   	</select>
+					   	<label>Escolha os dias da semana</label>
+				 	</div>
+			 	</div>
+			 	<label>Anotações</label><br/>
+			 	<div class="col s12">
+				 	<div class="col s4">
+					 	<div class="collection">
+					 	
+				        	<a href="#!" class="collection-item">Anotaçao1</a>
+					        <a href="#!" class="collection-item active">Anotaçao2</a>
+					        <a href="#!" class="collection-item">Anotaçao3</a>
+					        <a href="#!" class="collection-item">Anotaçao4</a>
+				      	</div>
+			      	</div>
+			      	<div class="col s8 ">
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçaoTexto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçaoTexto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçaoTexto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      		Texto da anotaçao
+			      	</div>
+		      	</div>
+  			</form>
+		</div>
+	</ui:define>
+	
+	<ui:define name="conteudoDireita">
+		<div class="row">
+			<div class="col s12">
+				<label>Aulas:</label>
+				<a class="waves-effect waves-light btn-small right  modal-trigger" href="#modalAdicionarAula"><i class="material-icons left">add</i>Adicionar</a>
+			</div>
+			<div class="col s12">
+				<div class="collection">
+	        		<a href="#!" class="collection-item">Aula1</a>
+			        <a href="#!" class="collection-item active">Aula2</a>
+			        <a href="#!" class="collection-item">Aula3</a>
+			        <a href="#!" class="collection-item">Aula4</a>
+		      	</div>
+			</div>
+		</div>
+	</ui:define>
+	
+</ui:composition>
+	
+

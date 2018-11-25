@@ -1,0 +1,61 @@
+@charset "ISO-8859-1";
+
+html{
+	height: 100%;
+}
+body{
+    height: 100%;
+    margin: 0px;
+}
+
+.menuItem{
+	margin-left: 5px;
+	margin-right: 5px;
+}
+#conteudoHeader{
+	width: 1000px;
+	height: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#header{
+	position: fixed;
+	width: 100%;
+    top: 0px;
+}
+.containerSombreado{
+	border-radius: 5px;
+ 	/* -webkit-box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 24px 38px 3px rgba(0, 0, 	0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2); */
+    /* box-shadow: 0px 0px 0px 1px; */
+    border: 1px solid;
+}
+#conteudoEsquerda{
+	min-height: 90%; /* //TODO mudar isso aqui quando tiver conteudo pra colocar */
+	width: 580px;
+    display: inline-block;
+    float: left;
+}
+#conteudoDireita{
+	min-height: 90%;
+	margin-left: 15px;
+	width: 400px;
+    display: inline-block;
+}
+#containerCentral{
+	width: 1000px;
+	height: calc(100% - 60px);
+    margin: 0px auto 0px auto;
+  	padding-top: 60px;
+}
+	
+.preencher{
+	width: 100%;
+	height: 100%;
+}
+.preencherHorizontal{
+	width: 100%;
+}
+.preencherVertical{
+	height: 100%;
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title><ui:insert name="titulo">Página não encontrada</ui:insert></title>
+	
+	<script type="text/javascript" src="../script/jquery-3.3.1.min.js"></script> 
+	
+	<link rel="shortcut icon" href="#{resource['camelo.png']}" type="image/x-icon" />
+	
+	<link type="text/css" rel="stylesheet" href="../style/utils.css" media="screen,projection" />
+	<link type="text/css" rel="stylesheet" href="../style/logar.css" media="screen,projection" />
+	
+	<script type="text/javascript" src="../materialize/js/materialize.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+	<link type="text/css" rel="stylesheet" href="../materialize/css/materialize.min.css" media="screen,projection" />
+	
+	<script type="text/javascript" src="../script/template.js"></script> 
+	
+	
+	<ui:insert name="estilos"/>
+</h:head>
+<h:body>
+
+	<div id="header">
+		<div id="conteudoHeader">
+			<ui:insert name="header"></ui:insert>
+			<p:menubar>
+				<p:menuitem value="Home" url="../paginas/home.xhtml" id="menuItemHome" class="menuItem waves-effect waves-light"/>
+				<p:menuitem value="Aulas" url="../paginas/aulas.xhtml" id="menuItemAulas" class="menuItem waves-effect waves-light"/>
+				<p:menuitem value="Anotações" url="../paginas/anotacoes.xhtml" id="menuItemAnotacoes" class="menuItem waves-effect waves-light"/>
+			</p:menubar>
+		
+		</div>
+		
+	</div>
+
+	<div id="containerCentral">
+		<div id="conteudoEsquerda" class="containerSombreado">
+			<ui:insert name="conteudoEsquerda">Left Section</ui:insert>
+		</div>
+		<div id="conteudoDireita" class="containerSombreado">
+			<ui:insert name="conteudoDireita">Left Section</ui:insert>
+		</div>
+	</div>
+	
+	
+
+</h:body>
+</html>

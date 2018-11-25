@@ -1,0 +1,38 @@
+#containerForm{
+	height: 50%;
+}
+#formLogin{
+	margin-top:20px;
+}
+#rowTelaToda{
+    width: 100%;
+}
+#logoLogin{
+	height: 50%;
+}
+#contentLogin{
+    height: 100%;
+    width: 100%;
+}
+#containerLogin{
+	position: absolute;
+    top: 10%;
+    bottom: 10%;
+    height: 80%;
+    -webkit-box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 24px 38px 3px rgba(0, 0, 	0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+	padding: 50px;
+}
+.column {
+	float: left;
+	padding: 100px;
+}
+.column.side {
+	width: 25%;
+}
+.column.middle {
+	width: 50%;
+}
+#imgLogo { 
+	height: 100%;
+}
