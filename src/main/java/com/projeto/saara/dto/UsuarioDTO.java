@@ -1,16 +1,21 @@
 package com.projeto.saara.dto;
 
+import com.projeto.saara.dto.output.LembreteDTO;
 import com.projeto.saara.entities.Usuario;
 
 import java.util.List;
 
 public class UsuarioDTO {
 
+    public UsuarioDTO(){}
+
     public UsuarioDTO(Usuario usuario) {
         this.nome = usuario.getNome();
         this.email = usuario.getEmail();
         this.cursoId = usuario.getCurso().getId().toString();
     }
+
+    private String usuarioId;
 
     private String nome;
 
@@ -20,7 +25,17 @@ public class UsuarioDTO {
 
     private String senha;
 
+    private String confirmSenha;
+
     private List<LembreteDTO> lembretes;
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
+    }
 
     public String getNome() {
         return nome;
@@ -48,6 +63,14 @@ public class UsuarioDTO {
 
     public String getSenha() {
         return senha;
+    }
+
+    public String getConfirmSenha() {
+        return confirmSenha;
+    }
+
+    public void setConfirmSenha(String confirmSenha) {
+        this.confirmSenha = confirmSenha;
     }
 
     public void setSenha(String senha) {

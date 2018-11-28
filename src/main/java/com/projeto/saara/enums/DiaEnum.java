@@ -1,6 +1,6 @@
 package com.projeto.saara.enums;
 
-public enum Dia {
+public enum DiaEnum {
     DOMINGO,
     SEGUNDA,
     TERCA,

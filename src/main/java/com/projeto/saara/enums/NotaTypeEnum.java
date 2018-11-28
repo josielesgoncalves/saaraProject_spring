@@ -1,6 +1,6 @@
 package com.projeto.saara.enums;
 
-public enum TipoNota {
+public enum NotaTypeEnum {
 
     NOTA_P1,
     NOTA_P2,

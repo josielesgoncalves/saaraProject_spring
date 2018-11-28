@@ -1,6 +1,6 @@
 package com.projeto.saara.enums;
 
-public enum TipoLembrete {
+public enum LembreteTypeEnum {
     PROVA,
     TRABALHO,
     OUTROS,

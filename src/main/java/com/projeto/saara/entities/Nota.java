@@ -1,6 +1,6 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.TipoNota;
+import com.projeto.saara.enums.NotaTypeEnum;
 
 import javax.persistence.*;
 
@@ -20,16 +20,7 @@ public class Nota {
     private double pesoNota;
 
     @Column(name = "TIPO")
-    private TipoNota tipo;
-
-    @Column(name = "CURSANDO_MATERIA")
-    private boolean cursandoMateria;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Usuario usuario;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Materia materia;
+    private NotaTypeEnum tipo;
 
     public Long getId() {
         return id;
@@ -55,35 +46,12 @@ public class Nota {
         this.pesoNota = pesoNota;
     }
 
-    public TipoNota getTipo() {
+    public NotaTypeEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoNota tipo) {
+    public void setTipo(NotaTypeEnum tipo) {
         this.tipo = tipo;
     }
 
-    public boolean isCursandoMateria() {
-        return cursandoMateria;
-    }
-
-    public void setCursandoMateria(boolean cursandoMateria) {
-        this.cursandoMateria = cursandoMateria;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Materia getMateria() {
-        return materia;
-    }
-
-    public void setMateria(Materia materia) {
-        this.materia = materia;
-    }
-}
+  }

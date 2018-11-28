@@ -16,9 +16,6 @@ public class Curso implements Serializable {
     @Column(name = "NOME")
     private String nome;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Usuario> usuarios;
-
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Materia> materias;
 
@@ -36,14 +33,6 @@ public class Curso implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public List<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
     public List<Materia> getMaterias() {

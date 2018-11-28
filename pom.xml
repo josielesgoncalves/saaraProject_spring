@@ -67,6 +67,7 @@
 			<scope>test</scope>
 		</dependency>-->
 
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -108,6 +109,15 @@
 			<artifactId>primefaces</artifactId>
 			<version>6.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+
+
+
 	</dependencies>
 
 	<build>

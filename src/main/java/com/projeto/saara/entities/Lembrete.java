@@ -1,6 +1,6 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.TipoLembrete;
+import com.projeto.saara.enums.LembreteTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +16,7 @@ public class Lembrete implements Serializable {
     private Long id;
 
     @Column(name = "TIPO")
-    private TipoLembrete tipo;
+    private LembreteTypeEnum tipo;
 
     @Column(name = "ASSUNTO")
     private String assunto;
@@ -41,11 +41,11 @@ public class Lembrete implements Serializable {
         this.id = id;
     }
 
-    public TipoLembrete getTipo() {
+    public LembreteTypeEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoLembrete tipo) {
+    public void setTipo(LembreteTypeEnum tipo) {
         this.tipo = tipo;
     }
 

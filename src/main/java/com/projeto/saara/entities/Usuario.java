@@ -22,8 +22,11 @@ public class Usuario implements Serializable {
     @Column(name = "SENHA")
     private String senha;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "CURSO_ID")
     private Curso curso;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<UsuarioMateria> materias;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Lembrete> lembretes;
@@ -66,6 +69,14 @@ public class Usuario implements Serializable {
 
     public void setCurso(Curso curso) {
         this.curso = curso;
+    }
+
+    public List<UsuarioMateria> getMaterias() {
+        return materias;
+    }
+
+    public void setMaterias(List<UsuarioMateria> materias) {
+        this.materias = materias;
     }
 
     public List<Lembrete> getLembretes() {

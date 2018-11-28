@@ -1,6 +1,6 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.Dia;
+import com.projeto.saara.enums.DiaEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,13 +20,13 @@ public class Aula implements Serializable {
     private String professor;
 
     @Column(name = "HORARIO")
-    private Date horarios;
+    private Date horario;
 
     @Column(name = "LOCAL")
     private String local;
 
-    @Column(name = "DIA")
-    private Dia dias;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Dia> dias;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Materia materia;
@@ -47,12 +47,12 @@ public class Aula implements Serializable {
         this.professor = professor;
     }
 
-    public Date getHorarios() {
-        return horarios;
+    public Date getHorario() {
+        return horario;
     }
 
-    public void setHorarios(Date horarios) {
-        this.horarios = horarios;
+    public void setHorario(Date horario) {
+        this.horario = horario;
     }
 
     public String getLocal() {
@@ -63,11 +63,11 @@ public class Aula implements Serializable {
         this.local = local;
     }
 
-    public Dia getDias() {
+    public List<Dia> getDias() {
         return dias;
     }
 
-    public void setDias(Dia dias) {
+    public void setDias(List<Dia> dias) {
         this.dias = dias;
     }
 

@@ -53,4 +53,5 @@ public class Materia implements Serializable {
     public void setAulas(List<Aula> aulas) {
         this.aulas = aulas;
     }
+
 }
