@@ -1,14 +1,12 @@
 package com.projeto.saara.services;
 
-import com.projeto.saara.dto.CursoDTO;
-import com.projeto.saara.entities.Curso;
-import com.projeto.saara.entities.Materia;
-import com.projeto.saara.entities.Usuario;
-import com.projeto.saara.entities.UsuarioMateria;
+import com.projeto.saara.dto.output.AulaDTO;
+import com.projeto.saara.entities.*;
+import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.helpers.ValidationException;
-import com.projeto.saara.repositories.interfaces.CursoRepository;
+import com.projeto.saara.repositories.interfaces.AulaRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,9 @@ public class CursoService {
 
     @Autowired
     private MateriaRepository materiaRepository;
+
+    @Autowired
+    private AulaRepository aulaRepository;
 
     /**
      * @return o quanto do curso o usuario concluiu
@@ -48,7 +49,5 @@ public class CursoService {
         double percetualConcluido = (double) (materiasConcluidas.size() / materias.size());
         String resultado = (percetualConcluido * 100) + "%";
         return resultado;
-
     }
-
 }

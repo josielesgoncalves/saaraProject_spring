@@ -49,7 +49,8 @@ public class SelectBoxController {
      * ao usuario
      */
     @GetMapping("/getStatusMateria")
-    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria() throws ValidationException {
+    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria()
+            throws ValidationException {
 
         List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getStatusMateria();
 
@@ -89,12 +90,15 @@ public class SelectBoxController {
      * @throws ValidationException
      */
     @GetMapping("/getMaterias/{id}")
-    public ResponseEntity<List<SelectBoxDTO>> getMateriasUsuario(String usuarioId) throws
-            ValidationException {
+    public ResponseEntity<List<SelectBoxDTO>> getMateriasUsuario(String usuarioId)
+            throws ValidationException {
 
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getMateriasUsuario(usuarioId);
-
+        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.
+                getMateriasUsuario(usuarioId);
         return ResponseEntity.ok().body(selectBoxDTOList);
     }
 
+    //TODO: criar selectBox para selecionar dia, mes, ano, hora, min e seg
+    //TODO: pode ser uma caixa com os valores e os valores serão recebbidos como string e
+    //TODO: convertidos em Calendar
 }

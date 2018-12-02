@@ -1,12 +1,9 @@
 package com.projeto.saara.controllers;
 
 import com.projeto.saara.dto.input.NewNotaDTO;
-import com.projeto.saara.dto.output.NotaDTO;
-import com.projeto.saara.dto.output.UsuarioDTO;
-import com.projeto.saara.dto.output.UsuarioMateriaDTO;
+import com.projeto.saara.dto.output.*;
 import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
-import com.projeto.saara.dto.output.LembreteDTO;
 import com.projeto.saara.helpers.ValidationException;
 import com.projeto.saara.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,5 +173,32 @@ public class UsuarioController {
 
         usuarioMateriaService.atualizaStatusUsuarioMateria(usuarioMateriaId, dto);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * @param usuarioId
+     * @param diaId
+     * @return lista de aulas do dia selecionado
+     * @throws ValidationException
+     */
+    @GetMapping("/getAulasDia")
+    public ResponseEntity<List<AulaDTO>> getAulasDia(String usuarioId, String diaId)
+            throws ValidationException {
+
+        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasDia(usuarioId, diaId);
+        return ResponseEntity.ok().body(aulaDTOS);
+    }
+
+    /**
+     * @param usuarioMateriaId
+     * @return lista de aulas da matéria selecionada
+     * @throws ValidationException
+     */
+    @GetMapping("/getAulasMateria")
+    public ResponseEntity<List<AulaDTO>> getAulasMateria(String usuarioMateriaId)
+            throws ValidationException {
+
+        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasMateria(usuarioMateriaId);
+        return ResponseEntity.ok().body(aulaDTOS);
     }
 }

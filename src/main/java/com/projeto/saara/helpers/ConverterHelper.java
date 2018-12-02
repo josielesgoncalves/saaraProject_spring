@@ -1,6 +1,7 @@
 package com.projeto.saara.helpers;
 
 import com.projeto.saara.dto.output.NotaDTO;
+import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
@@ -102,4 +103,13 @@ public final class ConverterHelper {
         return lembreteTypeEnum;
     }
 
+    public static DiaEnum convertIdToDiaEnum(Long id) {
+        DiaEnum diaEnum = null;
+        for (DiaEnum tipo : DiaEnum.values()) {
+            if (tipo.getId().equals(id)) {
+                diaEnum = tipo;
+            }
+        }
+        return diaEnum;
+    }
 }

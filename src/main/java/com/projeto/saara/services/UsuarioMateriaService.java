@@ -1,10 +1,13 @@
 package com.projeto.saara.services;
 
+import com.projeto.saara.dto.output.AulaDTO;
 import com.projeto.saara.dto.output.NotaDTO;
 import com.projeto.saara.dto.output.UsuarioMateriaDTO;
+import com.projeto.saara.entities.Aula;
 import com.projeto.saara.entities.Nota;
 import com.projeto.saara.entities.Usuario;
 import com.projeto.saara.entities.UsuarioMateria;
+import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.helpers.ValidationException;
 import com.projeto.saara.repositories.interfaces.NotaRepository;
@@ -28,7 +31,8 @@ public class UsuarioMateriaService {
     @Autowired
     private NotaRepository notaRepository;
 
-    public List<UsuarioMateriaDTO> getUsuarioMaterias(String usuarioId) throws ValidationException {
+    public List<UsuarioMateriaDTO> getUsuarioMaterias(String usuarioId)
+            throws ValidationException {
 
         List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
 
@@ -67,7 +71,8 @@ public class UsuarioMateriaService {
         return usuarioMateriaDTOS;
     }
 
-    public UsuarioMateriaDTO getUsuarioMateria(String usuarioMateriaId) throws ValidationException {
+    public UsuarioMateriaDTO getUsuarioMateria(String usuarioMateriaId)
+            throws ValidationException {
 
         UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
 
@@ -82,7 +87,8 @@ public class UsuarioMateriaService {
 
             usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
                     (usuarioMateria.getMateria().getId()));
-            usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString(usuarioMateria.getUsuario().getId()));
+            usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString
+                    (usuarioMateria.getUsuario().getId()));
             usuarioMateriaDTO.setStatusId(usuarioMateria.getStatus().getDescricao());
             usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString
                     (usuarioMateria.getMedia()));
@@ -97,15 +103,18 @@ public class UsuarioMateriaService {
         return usuarioMateriaDTO;
     }
 
-    private List<NotaDTO> setNotaDTO(List<Nota> notas, UsuarioMateria usuarioMateria) throws ValidationException {
+    private List<NotaDTO> setNotaDTO(List<Nota> notas, UsuarioMateria usuarioMateria)
+            throws ValidationException {
         List<NotaDTO> notaDTOS = null;
 
         if (notas != null) {
             notaDTOS = new ArrayList<>();
             for (Nota nota : notas) {
                 NotaDTO notaDTO = new NotaDTO();
-                notaDTO.setUsuarioMateriaId(ConverterHelper.convertLongToString(usuarioMateria.getId()));
-                notaDTO.setPesoNota(ConverterHelper.convertDoubleToString(nota.getPesoNota()));
+                notaDTO.setUsuarioMateriaId(ConverterHelper.convertLongToString
+                        (usuarioMateria.getId()));
+                notaDTO.setPesoNota(ConverterHelper.convertDoubleToString
+                        (nota.getPesoNota()));
                 notaDTO.setValor(ConverterHelper.convertDoubleToString(nota
                         .getValor()));
                 notaDTO.setTipo(nota.getTipo().getDescricao());
@@ -124,7 +133,66 @@ public class UsuarioMateriaService {
 
         Long statusId = ConverterHelper.convertStringToLong(dto.getStatusId());
         usuarioMateria.setStatus(ConverterHelper.convertIdToStatusEnum(statusId));
+    }
 
+    //getAulas por dia
+    public List<AulaDTO> getAulasDia(String usuarioId, String diaId)
+            throws ValidationException {
 
+        if (usuarioId == null || diaId == null) {
+            throw new ValidationException();
+        }
+        List<AulaDTO> aulaDTOS = new ArrayList<>();
+
+        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
+                .convertStringToLong(usuarioId));
+
+        if (usuario == null) {
+            throw new ValidationException();
+        }
+
+        List<UsuarioMateria> usuarioMaterias = usuario.getMaterias();
+        DiaEnum dia = ConverterHelper.convertIdToDiaEnum(ConverterHelper
+                .convertStringToLong(diaId));
+
+        for (UsuarioMateria usuarioMateria : usuarioMaterias) {
+            for (Aula aula : usuarioMateria.getMateria().getAulas()) {
+                if (aula != null && aula.getDia().equals(dia)) {
+                    AulaDTO aulaDTO = setAulaDTO(aula);
+                    aulaDTOS.add(aulaDTO);
+                }
+            }
+        }
+        return aulaDTOS;
+    }
+
+    //getAulas por materia
+    public List<AulaDTO> getAulasMateria(String usuarioMateriaId)
+            throws ValidationException {
+        if (usuarioMateriaId == null) {
+            throw new ValidationException();
+        }
+        List<AulaDTO> aulaDTOS = new ArrayList<>();
+
+        UsuarioMateria usuarioMateria = usuarioMateriaRepository.findUsuarioMateriaById
+                (ConverterHelper.convertStringToLong(usuarioMateriaId));
+
+        for (Aula aula : usuarioMateria.getMateria().getAulas()) {
+            AulaDTO aulaDTO = setAulaDTO(aula);
+            aulaDTOS.add(aulaDTO);
+        }
+        return aulaDTOS;
+    }
+
+    private AulaDTO setAulaDTO(Aula aula) throws ValidationException {
+
+        AulaDTO aulaDTO = new AulaDTO();
+        aulaDTO.setData(ConverterHelper.convertCalendarToString
+                (aula.getDataHorario()));
+        aulaDTO.setDia(aula.getDia().getDescricao());
+        aulaDTO.setLocal(aula.getLocal());
+        aulaDTO.setProfessor(aula.getProfessor());
+
+        return aulaDTO;
     }
 }
