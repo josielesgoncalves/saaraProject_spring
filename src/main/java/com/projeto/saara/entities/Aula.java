@@ -4,8 +4,10 @@ import com.projeto.saara.enums.DiaEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 @Entity
 @Table(name="AULA")
@@ -19,14 +21,14 @@ public class Aula implements Serializable {
     @Column(name = "PROFESSOR")
     private String professor;
 
-    @Column(name = "HORARIO")
-    private Date horario;
+    @Column(name = "DATA_HORARIO")
+    private Calendar dataHorario;
 
     @Column(name = "LOCAL")
     private String local;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Dia> dias;
+    @Column(name = "DIA")
+    private DiaEnum dia;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Materia materia;
@@ -47,12 +49,12 @@ public class Aula implements Serializable {
         this.professor = professor;
     }
 
-    public Date getHorario() {
-        return horario;
+    public Calendar getDataHorario() {
+        return dataHorario;
     }
 
-    public void setHorario(Date horario) {
-        this.horario = horario;
+    public void setDataHorario(Calendar dataHorario) {
+        this.dataHorario = dataHorario;
     }
 
     public String getLocal() {
@@ -63,12 +65,12 @@ public class Aula implements Serializable {
         this.local = local;
     }
 
-    public List<Dia> getDias() {
-        return dias;
+    public DiaEnum getDia() {
+        return dia;
     }
 
-    public void setDias(List<Dia> dias) {
-        this.dias = dias;
+    public void setDia(DiaEnum dia) {
+        this.dia = dia;
     }
 
     public Materia getMateria() {

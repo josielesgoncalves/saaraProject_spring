@@ -1,19 +1,8 @@
-package com.projeto.saara.dto;
-
-import com.projeto.saara.dto.output.LembreteDTO;
-import com.projeto.saara.entities.Usuario;
+package com.projeto.saara.dto.output;
 
 import java.util.List;
 
 public class UsuarioDTO {
-
-    public UsuarioDTO(){}
-
-    public UsuarioDTO(Usuario usuario) {
-        this.nome = usuario.getNome();
-        this.email = usuario.getEmail();
-        this.cursoId = usuario.getCurso().getId().toString();
-    }
 
     private String usuarioId;
 

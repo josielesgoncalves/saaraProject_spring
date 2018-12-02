@@ -18,11 +18,17 @@ public class UsuarioMateria implements Serializable {
     @Column(name = "MATERIA_ID")
     private Materia materia;
 
+    @Column(name = "USUARIO_ID")
+    private Usuario usuario;
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Nota> notas;
 
     @Column(name = "STATUS")
     private StatusEnum status;
+
+    @Column(name = "MEDIA")
+    private double media;
 
     public Long getId() {
         return id;
@@ -40,11 +46,19 @@ public class UsuarioMateria implements Serializable {
         this.materia = materia;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     public List<Nota> getNotas() {
         return notas;
     }
 
-    public void setNota(List<Nota> notas) {
+    public void setNotas(List<Nota> notas) {
         this.notas = notas;
     }
 
@@ -54,5 +68,13 @@ public class UsuarioMateria implements Serializable {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public double getMedia() {
+        return media;
+    }
+
+    public void setMedia(double media) {
+        this.media = media;
     }
 }

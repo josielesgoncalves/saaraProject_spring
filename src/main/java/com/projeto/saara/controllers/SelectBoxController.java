@@ -49,10 +49,52 @@ public class SelectBoxController {
      * ao usuario
      */
     @GetMapping("/getStatusMateria")
-    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria() {
+    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria() throws ValidationException {
 
         List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getStatusMateria();
 
         return ResponseEntity.ok().body(selectBoxDTOList);
     }
+
+    /**
+     * @param usuarioId
+     * @return lista de lembretes do usuario
+     * @throws ValidationException
+     */
+    @GetMapping("/getLembretes")
+    public ResponseEntity<List<SelectBoxDTO>> getLembretes(String usuarioId) throws
+            ValidationException {
+
+        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getLembretes(usuarioId);
+
+        return ResponseEntity.ok().body(selectBoxDTOList);
+    }
+
+    /**
+     * @return lista de tipos de lembretes
+     * @throws ValidationException
+     */
+    @GetMapping("/getLembreteType")
+    public ResponseEntity<List<SelectBoxDTO>> getLembreteType() throws
+            ValidationException {
+
+        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getLembreteType();
+
+        return ResponseEntity.ok().body(selectBoxDTOList);
+    }
+
+    /**
+     * @param usuarioId
+     * @return lista de materias que o usuario está cursando
+     * @throws ValidationException
+     */
+    @GetMapping("/getMaterias/{id}")
+    public ResponseEntity<List<SelectBoxDTO>> getMateriasUsuario(String usuarioId) throws
+            ValidationException {
+
+        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getMateriasUsuario(usuarioId);
+
+        return ResponseEntity.ok().body(selectBoxDTOList);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.projeto.saara.enums.LembreteTypeEnum;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -25,7 +26,7 @@ public class Lembrete implements Serializable {
     private String texto;
 
     @Column(name = "DATA")
-    private Date data;
+    private Calendar data;
 
     @ManyToOne
     private Materia materia;
@@ -65,11 +66,11 @@ public class Lembrete implements Serializable {
         this.texto = texto;
     }
 
-    public Date getData() {
+    public Calendar getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(Calendar data) {
         this.data = data;
     }
 

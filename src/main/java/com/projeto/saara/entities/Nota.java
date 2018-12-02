@@ -22,6 +22,9 @@ public class Nota {
     @Column(name = "TIPO")
     private NotaTypeEnum tipo;
 
+    @Column(name = "USUARIO_MATERIA_ID")
+    private UsuarioMateria usuarioMateria;
+
     public Long getId() {
         return id;
     }
@@ -54,4 +57,11 @@ public class Nota {
         this.tipo = tipo;
     }
 
-  }
+    public UsuarioMateria getUsuarioMateria() {
+        return usuarioMateria;
+    }
+
+    public void setUsuarioMateria(UsuarioMateria usuarioMateria) {
+        this.usuarioMateria = usuarioMateria;
+    }
+}

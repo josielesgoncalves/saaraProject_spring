@@ -1,6 +1,14 @@
 package com.projeto.saara.helpers;
 
+import com.projeto.saara.dto.output.NotaDTO;
+import com.projeto.saara.enums.LembreteTypeEnum;
+import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public final class ConverterHelper {
 
@@ -24,29 +32,74 @@ public final class ConverterHelper {
         return newId;
     }
 
-    public static StatusEnum convertStringToStatusEnum(String status) throws
-            ValidationException {
-
-        StatusEnum statusEnum = null;
-
-        if (status == null ||
-                !status.equals(StatusEnum.CURSADA.name()) ||
-                !status.equals(StatusEnum.CURSANDO.name()) ||
-                !status.equals(StatusEnum.NAO_CURSADA.name())) {
+    public static String convertCalendarToString(Calendar data)
+            throws ValidationException {
+        if (data == null) {
             throw new ValidationException();
         }
 
-        if (status.equals(StatusEnum.CURSADA.name())) {
-            statusEnum = StatusEnum.CURSADA;
+        DateFormat df = DateFormat.getDateTimeInstance();
+        String dataString = df.format(data);
+
+        return dataString;
+    }
+
+    public static Calendar convertStringToCalendar(String data)
+            throws ValidationException, ParseException {
+
+        if (data == null) {
+            throw new ValidationException();
         }
 
-        if (status.equals(StatusEnum.CURSANDO.name())) {
-            statusEnum = StatusEnum.CURSANDO;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sdf.parse(data));
+
+        return calendar;
+    }
+
+    public static String convertDoubleToString(double valor) {
+        String resultado = String.valueOf(valor);
+        return resultado;
+    }
+
+    public static double convertStringToDouble(String valor) throws ValidationException {
+        if (valor == null) {
+            throw new ValidationException();
         }
 
-        if (status.equals(StatusEnum.NAO_CURSADA.name())) {
-            statusEnum = StatusEnum.NAO_CURSADA;
+        double resultado = Double.valueOf(valor);
+        return resultado;
+    }
+
+    public static NotaTypeEnum convertIdToNotaTypeEnum(Long id) {
+        NotaTypeEnum notaTypeEnum = null;
+        for (NotaTypeEnum tipo : NotaTypeEnum.values()) {
+            if (tipo.getId().equals(id)) {
+                notaTypeEnum = tipo;
+            }
+        }
+        return notaTypeEnum;
+    }
+
+    public static StatusEnum convertIdToStatusEnum(Long id) {
+        StatusEnum statusEnum = null;
+        for (StatusEnum tipo : StatusEnum.values()) {
+            if (tipo.getId().equals(id)) {
+                statusEnum = tipo;
+            }
         }
         return statusEnum;
     }
+
+    public static LembreteTypeEnum convertIdToLembreteTypeEnum(Long id) {
+        LembreteTypeEnum lembreteTypeEnum = null;
+        for (LembreteTypeEnum tipo : LembreteTypeEnum.values()) {
+            if (tipo.getId().equals(id)) {
+                lembreteTypeEnum = tipo;
+            }
+        }
+        return lembreteTypeEnum;
+    }
+
 }

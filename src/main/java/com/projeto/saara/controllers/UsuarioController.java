@@ -1,18 +1,20 @@
 package com.projeto.saara.controllers;
 
-import com.projeto.saara.dto.NotaDTO;
-import com.projeto.saara.dto.UsuarioDTO;
-import com.projeto.saara.dto.UsuarioMateriaDTO;
+import com.projeto.saara.dto.input.NewNotaDTO;
+import com.projeto.saara.dto.output.NotaDTO;
+import com.projeto.saara.dto.output.UsuarioDTO;
+import com.projeto.saara.dto.output.UsuarioMateriaDTO;
+import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
 import com.projeto.saara.dto.output.LembreteDTO;
-import com.projeto.saara.dto.output.MateriaDTO;
 import com.projeto.saara.helpers.ValidationException;
-import com.projeto.saara.services.UsuarioService;
+import com.projeto.saara.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -21,7 +23,19 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    UsuarioService usuarioService;
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private LembreteService lembreteService;
+
+    @Autowired
+    private UsuarioMateriaService usuarioMateriaService;
+
+    @Autowired
+    private NotaService notaService;
+
+    @Autowired
+    private CursoService cursoService;
 
     /**
      * @param dto dados necessários para cadastrar o usuario
@@ -60,43 +74,107 @@ public class UsuarioController {
     }
 
     /**
+     * @param usuarioId propriedade de UsuarioDTO
+     * @return
+     * @throws ValidationException
+     */
+    @PostMapping("/adicionarLembrete")
+    public ResponseEntity<Void> adicionarLembrete(String usuarioId, String materiaId,
+                                                  @Valid @RequestBody NewLembreteDTO dto)
+            throws ValidationException, ParseException {
+
+        usuarioService.adicionarLembrete(usuarioId, materiaId, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/getLembretes")
+    public ResponseEntity<List<LembreteDTO>> getLembretes(String usuarioId)
+            throws ValidationException {
+
+        List<LembreteDTO> lembretesDto = lembreteService.getLembretes(usuarioId);
+        return ResponseEntity.ok().body(lembretesDto);
+    }
+
+    @GetMapping("/getLembretes/{id}")
+    public ResponseEntity<LembreteDTO> getLembrete(String lembreteId)
+            throws ValidationException {
+
+        LembreteDTO dto = lembreteService.getLembrete(lembreteId);
+        return ResponseEntity.ok().body(dto);
+    }
+
+    /**
      * @param usuarioId id do usuario
      * @return lista de matérias do usuário
      */
-    @GetMapping("/{id}/getMaterias")
-    public ResponseEntity<List<MateriaDTO>> getMaterias(String usuarioId) {
-        return null;
+    @GetMapping("/getMaterias")
+    public ResponseEntity<List<UsuarioMateriaDTO>> getMaterias(String usuarioId)
+            throws ValidationException {
+
+        List<UsuarioMateriaDTO> dto = usuarioMateriaService.getUsuarioMaterias(usuarioId);
+        return ResponseEntity.ok().body(dto);
     }
 
     /**
-     * @param usuarioId
-     * @param materiaId
+     * @param usuarioMateriaId
      * @return detalhes da matéria relacionadas ao usuario
      */
-    @GetMapping("/{id}/getMaterias/{id}")
-    public ResponseEntity<MateriaDTO> getMateria(String usuarioId, String materiaId) {
-        return null;
+    @GetMapping("/getMaterias/{id}")
+    public ResponseEntity<UsuarioMateriaDTO> getMateria(String usuarioMateriaId)
+            throws ValidationException {
+
+        UsuarioMateriaDTO dto = usuarioMateriaService.getUsuarioMateria(usuarioMateriaId);
+        return ResponseEntity.ok().body(dto);
     }
 
     /**
-     * @param usuarioId
-     * @param materiaId
+     * @param usuarioMateriaId
      * @param notaId
      * @return nota do usuario relacionada a materia dele
      */
-    @GetMapping("/{id}/getMaterias/{id}/getNota/{id}")
-    public ResponseEntity<NotaDTO> getNota(String usuarioId, String materiaId, String
-            notaId) {
-        return null;
+    @GetMapping("/getMaterias/{id}/getNota/{id}")
+    public ResponseEntity<NotaDTO> getNota(String usuarioMateriaId, String notaId)
+            throws ValidationException {
+
+        NotaDTO dto = notaService.getNota(usuarioMateriaId, notaId);
+        return ResponseEntity.ok().body(dto);
     }
 
-    @GetMapping("/{id}/getLembretes")
-    public ResponseEntity<List<LembreteDTO>> getLembretes(String usuarioId) {
-        return null;
+    /**
+     * Adiciona nota e calcula média do usuario
+     *
+     * @param usuarioMateriaId
+     * @param dto
+     * @return
+     * @throws ValidationException
+     */
+    @PostMapping("/adicionarNota")
+    public ResponseEntity<Void> adicionarNota(String usuarioMateriaId, @Valid
+    @RequestBody NewNotaDTO dto) throws ValidationException {
+
+        notaService.adicionarNota(usuarioMateriaId, dto);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/getLembretes/{id}")
-    public LembreteDTO getLembrete(String usuarioId, String lembreteId) {
-        return null;
+    /**
+     * @param usuarioId
+     * @return Percentual de conclusão de curso baseado nas matérias que já foram cursadas
+     * @throws ValidationException
+     */
+    @GetMapping("/getPercentualCurso")
+    public ResponseEntity<String> getPercentualCurso(String usuarioId)
+            throws ValidationException {
+
+        String percentualCurso = cursoService.getCursoConcluido(usuarioId);
+        return ResponseEntity.ok().body(percentualCurso);
+    }
+
+    @PutMapping("/atualizaStatusMateria/{id}")
+    public ResponseEntity<Void> atualizaMateria(String usuarioMateriaId,
+                                                UsuarioMateriaDTO dto)
+            throws ValidationException {
+
+        usuarioMateriaService.atualizaStatusUsuarioMateria(usuarioMateriaId, dto);
+        return ResponseEntity.noContent().build();
     }
 }

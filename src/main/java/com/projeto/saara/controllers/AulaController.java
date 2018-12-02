@@ -1,6 +1,6 @@
 package com.projeto.saara.controllers;
 
-import com.projeto.saara.dto.AulaDTO;
+import com.projeto.saara.dto.output.AulaDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
