@@ -1,11 +1,14 @@
 package com.projeto.saara.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "CURSO")
+@Data
 public class Curso implements Serializable {
 
     @Id
@@ -16,30 +19,9 @@ public class Curso implements Serializable {
     @Column(name = "NOME")
     private String nome;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Materia.class)
     private List<Materia> materias;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public List<Materia> getMaterias() {
-        return materias;
-    }
-
-    public void setMaterias(List<Materia> materias) {
-        this.materias = materias;
-    }
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    private List<Usuario> usuarios;
 }

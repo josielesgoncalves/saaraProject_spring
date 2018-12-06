@@ -1,6 +1,7 @@
 package com.projeto.saara.entities;
 
 import com.projeto.saara.enums.StatusEnum;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,10 +16,12 @@ public class UsuarioMateria implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "MATERIA_ID")
+    //@Column(name = "MATERIA_ID")
+    @ManyToOne(targetEntity = Materia.class)
     private Materia materia;
 
-    @Column(name = "USUARIO_ID")
+    //@Column(name = "USUARIO_ID")
+    @ManyToOne(targetEntity = Usuario.class)
     private Usuario usuario;
 
     @OneToMany(fetch = FetchType.LAZY)
