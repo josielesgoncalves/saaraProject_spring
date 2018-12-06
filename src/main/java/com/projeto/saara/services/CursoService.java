@@ -1,11 +1,10 @@
 package com.projeto.saara.services;
 
-import com.projeto.saara.dto.output.AulaDTO;
 import com.projeto.saara.entities.*;
-import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.StatusEnum;
+import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.helpers.ValidationException;
 import com.projeto.saara.repositories.interfaces.AulaRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
@@ -18,26 +17,30 @@ import java.util.List;
 @Service
 public class CursoService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    private final MateriaRepository materiaRepository;
+
+    private final AulaRepository aulaRepository;
 
     @Autowired
-    private MateriaRepository materiaRepository;
-
-    @Autowired
-    private AulaRepository aulaRepository;
+    public CursoService(UsuarioRepository usuarioRepository, MateriaRepository materiaRepository, AulaRepository aulaRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.materiaRepository = materiaRepository;
+        this.aulaRepository = aulaRepository;
+    }
 
     /**
      * @return o quanto do curso o usuario concluiu
      */
-    public String getCursoConcluido(String usuarioId) throws
-            ValidationException {
+    public String getCursoConcluido(long usuarioId) {
 
-        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
-                .convertStringToLong(usuarioId));
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException("Usuario de id \"" + usuarioId + "\" não encontrado"));
 
         Curso curso = usuario.getCurso();
-        List<Materia> materias = materiaRepository.findAllByCursos(curso);
+        List<Materia> materias = materiaRepository.findAllByCursos(curso).orElseThrow(() ->
+                new ObjetoNaoEncontradoException("As materias do curso \"" + curso.getNome() + "\" não foram encontradas"));
 
         List<UsuarioMateria> materiasConcluidas = new ArrayList<>();
         for (UsuarioMateria usuarioMateria : usuario.getMaterias()) {
@@ -45,9 +48,8 @@ public class CursoService {
                 materiasConcluidas.add(usuarioMateria);
             }
         }
-
         double percetualConcluido = (double) (materiasConcluidas.size() / materias.size());
-        String resultado = (percetualConcluido * 100) + "%";
-        return resultado;
+
+        return (percetualConcluido * 100) + "%";
     }
 }

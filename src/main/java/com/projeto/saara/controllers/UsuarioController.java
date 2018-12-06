@@ -4,7 +4,9 @@ import com.projeto.saara.dto.input.NewNotaDTO;
 import com.projeto.saara.dto.output.*;
 import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
-import com.projeto.saara.helpers.ValidationException;
+import com.projeto.saara.exceptions.ValidationException;
+import com.projeto.saara.helpers.ConverterHelper;
+import com.projeto.saara.helpers.Resposta;
 import com.projeto.saara.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,85 +21,79 @@ import java.util.List;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    private final LembreteService lembreteService;
+
+    private final UsuarioMateriaService usuarioMateriaService;
+
+    private final NotaService notaService;
+
+    private final CursoService cursoService;
 
     @Autowired
-    private LembreteService lembreteService;
-
-    @Autowired
-    private UsuarioMateriaService usuarioMateriaService;
-
-    @Autowired
-    private NotaService notaService;
-
-    @Autowired
-    private CursoService cursoService;
+    public UsuarioController(UsuarioService usuarioService, LembreteService lembreteService, UsuarioMateriaService usuarioMateriaService, NotaService notaService, CursoService cursoService) {
+        this.usuarioService = usuarioService;
+        this.lembreteService = lembreteService;
+        this.usuarioMateriaService = usuarioMateriaService;
+        this.notaService = notaService;
+        this.cursoService = cursoService;
+    }
 
     /**
      * @param dto dados necessários para cadastrar o usuario
      * @return void
-     * @throws ValidationException
      */
     @PostMapping("/cadastrar")
-    public ResponseEntity<Void> adicionarUsuario(@Valid @RequestBody NewUsuarioDTO dto)
-            throws ValidationException {
+    public ResponseEntity<Object> adicionarUsuario(@Valid @RequestBody NewUsuarioDTO dto) {
         usuarioService.cadastrarUsuario(dto);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
     @PostMapping("/cadastrar/materias")
-    public ResponseEntity<Void> cadastrarMaterias(NewUsuarioDTO dto,
-                                                  List<UsuarioMateriaDTO> idList)
-            throws ValidationException {
+    public ResponseEntity<Object> cadastrarMaterias(NewUsuarioDTO dto, List<UsuarioMateriaDTO> idList) {
         usuarioService.cadastrarMaterias(dto, idList);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
     /**
      * @param email email do usuario
      * @return dados do usuário
-     * @throws ValidationException
      */
     @GetMapping("/email")
-    public ResponseEntity<UsuarioDTO> getUsuario(@RequestParam(value = "value")
-                                                         String email)
-            throws ValidationException {
+    public ResponseEntity<Object> getUsuario(@RequestParam(value = "value") String email) {
 
         UsuarioDTO dto = usuarioService.buscarUsuario(email);
-        return ResponseEntity.ok().body(dto);
+        return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
     /**
      * @param usuarioId propriedade de UsuarioDTO
-     * @return
-     * @throws ValidationException
+     * @return vazio
      */
     @PostMapping("/adicionarLembrete")
-    public ResponseEntity<Void> adicionarLembrete(String usuarioId, String materiaId,
-                                                  @Valid @RequestBody NewLembreteDTO dto)
-            throws ValidationException, ParseException {
+    public ResponseEntity<Object> adicionarLembrete(
+            String usuarioId, String materiaId, @Valid @RequestBody NewLembreteDTO dto) {
 
-        usuarioService.adicionarLembrete(usuarioId, materiaId, dto);
-        return ResponseEntity.noContent().build();
+        usuarioService.adicionarLembrete(ConverterHelper.convertStringToLong(usuarioId), ConverterHelper.convertStringToLong(materiaId), dto);
+
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
     @GetMapping("/getLembretes")
-    public ResponseEntity<List<LembreteDTO>> getLembretes(String usuarioId)
-            throws ValidationException {
+    public ResponseEntity<Object> getLembretes(String usuarioId) {
 
-        List<LembreteDTO> lembretesDto = lembreteService.getLembretes(usuarioId);
-        return ResponseEntity.ok().body(lembretesDto);
+        List<LembreteDTO> lembretesDto = lembreteService.getLembretes(ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(new Resposta(0, "", lembretesDto));
     }
 
-    @GetMapping("/getLembretes/{id}")
-    public ResponseEntity<LembreteDTO> getLembrete(String lembreteId)
-            throws ValidationException {
+    @GetMapping("/getLembretes/{lembreteId}")
+    public ResponseEntity<Object> getLembrete(@PathVariable String lembreteId) {
 
-        LembreteDTO dto = lembreteService.getLembrete(lembreteId);
-        return ResponseEntity.ok().body(dto);
+        LembreteDTO dto = lembreteService.getLembrete(ConverterHelper.convertStringToLong(lembreteId));
+        return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
     /**
@@ -105,100 +101,88 @@ public class UsuarioController {
      * @return lista de matérias do usuário
      */
     @GetMapping("/getMaterias")
-    public ResponseEntity<List<UsuarioMateriaDTO>> getMaterias(String usuarioId)
-            throws ValidationException {
+    public ResponseEntity<Object> getMaterias(String usuarioId) {
 
-        List<UsuarioMateriaDTO> dto = usuarioMateriaService.getUsuarioMaterias(usuarioId);
-        return ResponseEntity.ok().body(dto);
+        List<UsuarioMateriaDTO> dto = usuarioMateriaService.getUsuarioMaterias(ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
     /**
-     * @param usuarioMateriaId
+     * @param usuarioMateriaId usuariomateriaId
      * @return detalhes da matéria relacionadas ao usuario
      */
-    @GetMapping("/getMaterias/{id}")
-    public ResponseEntity<UsuarioMateriaDTO> getMateria(String usuarioMateriaId)
-            throws ValidationException {
+    @GetMapping("/getMaterias/{usuarioMateriaId}")
+    public ResponseEntity<Object> getMateria(@PathVariable String usuarioMateriaId) {
 
-        UsuarioMateriaDTO dto = usuarioMateriaService.getUsuarioMateria(usuarioMateriaId);
-        return ResponseEntity.ok().body(dto);
+        UsuarioMateriaDTO dto = usuarioMateriaService.getUsuarioMateria(ConverterHelper.convertStringToLong(usuarioMateriaId));
+        return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
     /**
-     * @param usuarioMateriaId
-     * @param notaId
+     * @param usuarioMateriaId usuarioMateriaId
+     * @param notaId notaid
      * @return nota do usuario relacionada a materia dele
      */
-    @GetMapping("/getMaterias/{id}/getNota/{id}")
-    public ResponseEntity<NotaDTO> getNota(String usuarioMateriaId, String notaId)
-            throws ValidationException {
+    @GetMapping("/getMaterias/{usuarioMateriaId}/getNota/{notaId}")
+    public ResponseEntity<Object> getNota(@PathVariable String usuarioMateriaId,@PathVariable String notaId) {
 
-        NotaDTO dto = notaService.getNota(usuarioMateriaId, notaId);
-        return ResponseEntity.ok().body(dto);
+        NotaDTO dto = notaService.getNota(ConverterHelper.convertStringToLong(usuarioMateriaId), ConverterHelper.convertStringToLong(notaId));
+        return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
     /**
      * Adiciona nota e calcula média do usuario
      *
-     * @param usuarioMateriaId
-     * @param dto
-     * @return
-     * @throws ValidationException
+     * @param usuarioMateriaId usuariomateriaId
+     * @param dto NotaDTO
+     * @return vazio
      */
     @PostMapping("/adicionarNota")
-    public ResponseEntity<Void> adicionarNota(String usuarioMateriaId, @Valid
-    @RequestBody NewNotaDTO dto) throws ValidationException {
+    public ResponseEntity<Object> adicionarNota(String usuarioMateriaId, @Valid
+    @RequestBody NewNotaDTO dto) {
 
-        notaService.adicionarNota(usuarioMateriaId, dto);
-        return ResponseEntity.noContent().build();
+        notaService.adicionarNota(ConverterHelper.convertStringToLong(usuarioMateriaId), dto);
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
     /**
-     * @param usuarioId
+     * @param usuarioId usuarioid
      * @return Percentual de conclusão de curso baseado nas matérias que já foram cursadas
-     * @throws ValidationException
      */
     @GetMapping("/getPercentualCurso")
-    public ResponseEntity<String> getPercentualCurso(String usuarioId)
-            throws ValidationException {
+    public ResponseEntity<Object> getPercentualCurso(String usuarioId) {
 
-        String percentualCurso = cursoService.getCursoConcluido(usuarioId);
-        return ResponseEntity.ok().body(percentualCurso);
+        String percentualCurso = cursoService.getCursoConcluido(ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(new Resposta(0, "", percentualCurso));
     }
 
-    @PutMapping("/atualizaStatusMateria/{id}")
-    public ResponseEntity<Void> atualizaMateria(String usuarioMateriaId,
-                                                UsuarioMateriaDTO dto)
-            throws ValidationException {
+    @PutMapping("/atualizaStatusMateria/{usuarioMateriaId}")
+    public ResponseEntity<Object> atualizaMateria(@PathVariable String usuarioMateriaId, UsuarioMateriaDTO dto) {
 
-        usuarioMateriaService.atualizaStatusUsuarioMateria(usuarioMateriaId, dto);
-        return ResponseEntity.noContent().build();
+        usuarioMateriaService.atualizaStatusUsuarioMateria(ConverterHelper.convertStringToLong(usuarioMateriaId), dto);
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
     /**
-     * @param usuarioId
-     * @param diaId
+     * @param usuarioId usuarioid
+     * @param diaId diaid
      * @return lista de aulas do dia selecionado
-     * @throws ValidationException
      */
     @GetMapping("/getAulasDia")
-    public ResponseEntity<List<AulaDTO>> getAulasDia(String usuarioId, String diaId)
-            throws ValidationException {
+    public ResponseEntity<Object> getAulasDia(String usuarioId, String diaId){
 
-        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasDia(usuarioId, diaId);
-        return ResponseEntity.ok().body(aulaDTOS);
+        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasDia(ConverterHelper.convertStringToLong(usuarioId), ConverterHelper.convertStringToLong(diaId));
+        return ResponseEntity.ok().body(new Resposta(0, "", aulaDTOS));
     }
 
     /**
-     * @param usuarioMateriaId
+     * @param usuarioMateriaId usuariomateriaID
      * @return lista de aulas da matéria selecionada
-     * @throws ValidationException
      */
     @GetMapping("/getAulasMateria")
-    public ResponseEntity<List<AulaDTO>> getAulasMateria(String usuarioMateriaId)
-            throws ValidationException {
+    public ResponseEntity<Object> getAulasMateria(String usuarioMateriaId) {
 
-        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasMateria(usuarioMateriaId);
-        return ResponseEntity.ok().body(aulaDTOS);
+        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasMateria(ConverterHelper.convertStringToLong(usuarioMateriaId));
+        return ResponseEntity.ok().body(new Resposta(0, "", aulaDTOS));
     }
 }

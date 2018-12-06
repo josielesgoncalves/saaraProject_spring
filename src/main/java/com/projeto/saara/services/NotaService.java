@@ -3,11 +3,12 @@ package com.projeto.saara.services;
 import com.projeto.saara.dto.input.NewNotaDTO;
 import com.projeto.saara.dto.output.NotaDTO;
 import com.projeto.saara.entities.Nota;
-import com.projeto.saara.entities.Usuario;
 import com.projeto.saara.entities.UsuarioMateria;
 import com.projeto.saara.enums.NotaTypeEnum;
+import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.helpers.ValidationException;
+import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.NotaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioMateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
@@ -20,57 +21,53 @@ import java.util.List;
 @Service
 public class NotaService {
 
-    @Autowired
-    private NotaRepository notaRepository;
+    private final NotaRepository notaRepository;
+
+    private final UsuarioMateriaRepository usuarioMateriaRepository;
+
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UsuarioMateriaRepository usuarioMateriaRepository;
+    public NotaService(NotaRepository notaRepository, UsuarioMateriaRepository usuarioMateriaRepository, UsuarioRepository usuarioRepository) {
+        this.notaRepository = notaRepository;
+        this.usuarioMateriaRepository = usuarioMateriaRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
+    public NotaDTO getNota(long usuarioMateriaId, long notaId) {
 
-    public NotaDTO getNota(String usuarioMateriaId, String notaId)
-            throws ValidationException {
+        UsuarioMateria usuarioMateria =
+                usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
+                    new ObjetoNaoEncontradoException(
+                            "A materia do usuario de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+
+        Nota nota = notaRepository.findNotaByUsuarioMateriaAndId(usuarioMateria, notaId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "A nota do usuarioMateria de id \"" + usuarioMateria + "\" " +
+                                "e da nota de id \"" + notaId + "\" não foi encontrada"));
+
         NotaDTO notaDTO = new NotaDTO();
 
-        if (usuarioMateriaId == null || notaId != null) {
-            throw new ValidationException();
-        }
+        notaDTO.setUsuarioMateriaId(ConverterHelper.convertLongToString
+                (nota.getUsuarioMateria().getId()));
+        notaDTO.setNotaId(ConverterHelper.convertLongToString(nota.getId()));
+        notaDTO.setPesoNota(ConverterHelper.convertDoubleToString(nota.getPesoNota()));
+        notaDTO.setValor(ConverterHelper.convertDoubleToString(nota.getValor()));
+        notaDTO.setTipo(nota.getTipo().getDescricao());
 
-        UsuarioMateria usuarioMateria = usuarioMateriaRepository.findUsuarioMateriaById
-                (ConverterHelper.convertStringToLong(usuarioMateriaId));
-
-        if (usuarioMateria == null) {
-            throw new ValidationException();
-        }
-        Nota nota = notaRepository.findNotaByUsuarioMateriaAndId(usuarioMateria,
-                ConverterHelper.convertStringToLong(notaId));
-
-        if (nota != null) {
-            notaDTO.setUsuarioMateriaId(ConverterHelper.convertLongToString
-                    (nota.getUsuarioMateria().getId()));
-            notaDTO.setNotaId(ConverterHelper.convertLongToString(nota.getId()));
-            notaDTO.setPesoNota(ConverterHelper.convertDoubleToString(nota.getPesoNota()));
-            notaDTO.setValor(ConverterHelper.convertDoubleToString(nota.getValor()));
-            notaDTO.setTipo(nota.getTipo().getDescricao());
-        }
         return notaDTO;
     }
 
-    public void adicionarNota(String usuarioMateriaId, NewNotaDTO dto)
-            throws ValidationException {
+    public void adicionarNota(long usuarioMateriaId, NewNotaDTO dto) {
 
-        if (usuarioMateriaId == null || dto == null) {
-            throw new ValidationException();
-        }
+        if (dto == null)
+            throw new ParametroInvalidoException("NotaDTO nulo");
 
-        UsuarioMateria usuarioMateria = usuarioMateriaRepository.findUsuarioMateriaById
-                (ConverterHelper.convertStringToLong(usuarioMateriaId));
-
-        if (usuarioMateria == null) {
-            throw new ValidationException();
-        }
+        UsuarioMateria usuarioMateria =
+                usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
+                    new ObjetoNaoEncontradoException(
+                        "A materia do usuario de id \"" + usuarioMateriaId + "\" não foi encontrada"));
 
         Nota nota = new Nota();
         nota.setUsuarioMateria(usuarioMateria);

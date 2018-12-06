@@ -5,10 +5,11 @@ import com.projeto.saara.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LembreteRepository extends JpaRepository<Lembrete, Long> {
 
-    List<Lembrete> findLembreteByUsuario(Usuario usuario);
+    Optional<List<Lembrete>> findLembreteByUsuario(Usuario usuario);
 
-    Lembrete findLembreteById(Long id);
+    Optional<Lembrete> findLembreteById(Long id);
 }

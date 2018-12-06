@@ -1,10 +1,12 @@
 package com.projeto.saara.helpers;
 
-import com.projeto.saara.dto.output.NotaDTO;
 import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
+import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.saara.exceptions.ParametroInvalidoException;
+import com.projeto.saara.exceptions.ValidationException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,61 +18,55 @@ public final class ConverterHelper {
     private ConverterHelper() {
     }
 
-    public static String convertLongToString(Long id) throws ValidationException {
-        String newId = id.toString();
+    public static String convertLongToString(Long id) {
+        if (id == null)
+            throw new ParametroInvalidoException("Long a ser convertido nulo");
 
-        if (newId == null)
-            throw new ValidationException();
-        return newId;
+        return id.toString();
     }
 
-    public static Long convertStringToLong(String id) throws ValidationException {
-        Long newId = Long.parseLong(id);
+    public static Long convertStringToLong(String id) {
+        if (!validaString(id))
+            throw new ParametroInvalidoException("String a ser convertida nula");
 
-        if (newId == null)
-            throw new ValidationException();
-
-        return newId;
+        return Long.parseLong(id);
     }
 
-    public static String convertCalendarToString(Calendar data)
-            throws ValidationException {
-        if (data == null) {
-            throw new ValidationException();
-        }
+    public static String convertCalendarToString(Calendar data) {
+        if (data == null)
+            throw new ParametroInvalidoException("Data a ser convertida nula");
 
         DateFormat df = DateFormat.getDateTimeInstance();
-        String dataString = df.format(data);
 
-        return dataString;
+        return df.format(data);
     }
 
-    public static Calendar convertStringToCalendar(String data)
-            throws ValidationException, ParseException {
-
-        if (data == null) {
-            throw new ValidationException();
-        }
+    public static Calendar convertStringToCalendar(String data) {
+        if (data == null)
+            throw new ParametroInvalidoException("String de data a ser convertida null");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sdf.parse(data));
 
+        try
+        {
+            calendar.setTime(sdf.parse(data));
+        }catch(ParseException pex){
+            throw new ParametroInvalidoException("Data nao pode ser convertida");
+        }
         return calendar;
     }
 
     public static String convertDoubleToString(double valor) {
-        String resultado = String.valueOf(valor);
-        return resultado;
+        return String.valueOf(valor);
     }
 
-    public static double convertStringToDouble(String valor) throws ValidationException {
+    public static double convertStringToDouble(String valor) {
         if (valor == null) {
-            throw new ValidationException();
+            throw new ParametroInvalidoException("valor para converter para string nulo");
         }
 
-        double resultado = Double.valueOf(valor);
-        return resultado;
+        return Double.valueOf(valor);
     }
 
     public static NotaTypeEnum convertIdToNotaTypeEnum(Long id) {
@@ -111,5 +107,12 @@ public final class ConverterHelper {
             }
         }
         return diaEnum;
+    }
+
+    private static boolean validaString(String string)
+    {
+        if(string == null)
+            return false;
+        return !string.equals("");
     }
 }

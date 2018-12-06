@@ -6,8 +6,10 @@ import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
 import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.StatusEnum;
+import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.helpers.ValidationException;
+import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.CursoRepository;
 import com.projeto.saara.repositories.interfaces.LembreteRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
@@ -22,44 +24,55 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    private final CursoRepository cursoRepository;
+
+    private final MateriaRepository materiaRepository;
+
+    private final LembreteRepository lembreteRepository;
 
     @Autowired
-    private CursoRepository cursoRepository;
+    public UsuarioService(UsuarioRepository usuarioRepository, CursoRepository cursoRepository, MateriaRepository materiaRepository, LembreteRepository lembreteRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.cursoRepository = cursoRepository;
+        this.materiaRepository = materiaRepository;
+        this.lembreteRepository = lembreteRepository;
+    }
 
-    @Autowired
-    private MateriaRepository materiaRepository;
-
-    @Autowired
-    private LembreteRepository lembreteRepository;
-
-    public UsuarioDTO buscarUsuario(String login) throws ValidationException {
+    public UsuarioDTO buscarUsuario(String login) {
 
         UsuarioDTO dto = null;
-        final Usuario usuario = usuarioRepository.findUsuarioByEmail(login);
+        final Usuario usuario = usuarioRepository.findUsuarioByEmail(login).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O usuario de email \"" + login + "\" não foi encontrado"));
 
-        if (usuario == null) {
-            throw new ValidationException();
-        }
+       /* new UsuarioDTO(
+                ConverterHelper.convertLongToString(usuario.getId()),
+                usuario.getNome(),
+                usuario.getEmail(),
+                ConverterHelper.convertLongToString(usuario.getCurso().getId()),
+                usuario.getSenha(),
+                usuario.getSenha(),
+                new NewLembreteDTO()usuario.getLembretes()
+        );*/
+       //TODO aqui tava retornando sempre nulo, tentei criar o DTO mas ta confuso o dto de lembrete e a funcao criar la dentro
         return dto;
     }
 
-    public boolean usuarioCadastrado(String email) {
-        boolean cadastrado = true;
-        Usuario usuario = usuarioRepository.findUsuarioByEmail(email);
-
-        if (usuario == null)
-            cadastrado = false;
-
-        return cadastrado;
+    private boolean usuarioCadastrado(String email)
+    {
+        return usuarioRepository.findUsuarioByEmail(email).isPresent();
     }
 
-    public void cadastrarUsuario(NewUsuarioDTO dto) throws ValidationException {
+    public void cadastrarUsuario(NewUsuarioDTO dto) {
         if (!usuarioCadastrado(dto.getEmail())) {
             Usuario usuario = dto.criarNovoUsuario();
-            Curso curso = cursoRepository.findCursoById
-                    (ConverterHelper.convertStringToLong(dto.getCursoId()));
+
+            Curso curso =
+                cursoRepository.findCursoById(ConverterHelper.convertStringToLong(dto.getCursoId())).orElseThrow(() ->
+                    new ObjetoNaoEncontradoException(
+                            "O curso de id \"" + dto.getCursoId() + "\" não foi encontrado"));
 
             usuario.setCurso(curso);
 
@@ -70,25 +83,23 @@ public class UsuarioService {
     /**
      * Salva os dados do usuario com as materias cursadas ou cursando
      *
-     * @param usuarioDTO
+     * @param usuarioDTO usuarioDTO
      * @param dtoList    lista de dados da materia selecionada
-     * @throws ValidationException
      */
-    public void cadastrarMaterias(NewUsuarioDTO usuarioDTO, List<UsuarioMateriaDTO> dtoList)
-            throws
-            ValidationException {
+    public void cadastrarMaterias(NewUsuarioDTO usuarioDTO, List<UsuarioMateriaDTO> dtoList) {
 
-        Usuario usuario = usuarioRepository.findUsuarioByEmail(usuarioDTO.getEmail());
-        if (usuario == null) {
-            throw new ValidationException();
-        }
+        Usuario usuario = usuarioRepository.findUsuarioByEmail(usuarioDTO.getEmail()).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O usuario de email \"" + usuarioDTO.getEmail() + "\" não foi encontrado"));
 
         List<UsuarioMateria> usuarioMaterias = new ArrayList<>();
 
         //Nesse caso o usuario pode não salvar as matérias que não cursou
         for (UsuarioMateriaDTO item : dtoList) {
-            Materia materia = materiaRepository.getMateriaById(ConverterHelper
-                    .convertStringToLong(item.getMateriaId()));
+            Materia materia = materiaRepository.getMateriaById(
+                    ConverterHelper.convertStringToLong(item.getMateriaId())).orElseThrow(() ->
+                        new ObjetoNaoEncontradoException(
+                            "A materia de id \"" + item.getMateriaId() + "\" não foi encontrada"));
 
             Long statusId = ConverterHelper.convertStringToLong(item.getStatusId());
             StatusEnum status = ConverterHelper.convertIdToStatusEnum(statusId);
@@ -103,19 +114,17 @@ public class UsuarioService {
         usuarioRepository.saveAndFlush(usuario);
     }
 
-    public void adicionarLembrete(String usuarioId, String materiaId, NewLembreteDTO dto)
-            throws ValidationException, ParseException {
-        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
-                .convertStringToLong(usuarioId));
+    public void adicionarLembrete(long usuarioId, long materiaId, NewLembreteDTO dto) {
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O usuario de id \"" + usuarioId + "\" não foi encontrado"));
 
-        Materia materia = null;
-        if (materiaId != null) {
-            materia = materiaRepository.getMateriaById(ConverterHelper
-                    .convertStringToLong(materiaId));
-        }
+        Materia materia = materiaRepository.getMateriaById(materiaId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "A materia de id \"" + materiaId + "\" não foi encontrada"));
 
         if (dto == null) {
-            throw new ValidationException();
+            throw new ParametroInvalidoException("lembreteDTO nulo");
         }
 
         Lembrete lembrete = dto.criarLembrete();

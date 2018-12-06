@@ -4,8 +4,9 @@ import com.projeto.saara.dto.output.SelectBoxDTO;
 import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
+import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.helpers.ValidationException;
+import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.CursoRepository;
 import com.projeto.saara.repositories.interfaces.LembreteRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
@@ -13,85 +14,92 @@ import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SelectBoxService {
 
-    @Autowired
-    private CursoRepository cursoRepository;
+    private final CursoRepository cursoRepository;
+
+    private final MateriaRepository materiaRepository;
+
+    private final UsuarioRepository usuarioRepository;
+
+    private final LembreteRepository lembreteRepository;
 
     @Autowired
-    private MateriaRepository materiaRepository;
+    public SelectBoxService(CursoRepository cursoRepository, MateriaRepository materiaRepository, UsuarioRepository usuarioRepository, LembreteRepository lembreteRepository) {
+        this.cursoRepository = cursoRepository;
+        this.materiaRepository = materiaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.lembreteRepository = lembreteRepository;
+    }
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private LembreteRepository lembreteRepository;
-
-    public List<SelectBoxDTO> getCursos() throws ValidationException {
+    public List<SelectBoxDTO> getCursos() {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
         List<Curso> cursos = cursoRepository.findAll();
-        if (cursos == null) {
-            throw new ValidationException();
-        }
 
-        for (Curso curso : cursos) {
-            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                    (curso.getId()), curso.getNome()));
-        }
-        return selectBoxList;
-    }
+        if (cursos == null || cursos.isEmpty())
+            throw new ObjetoNaoEncontradoException("nenhum curso foi encontrado");
 
-    public List<SelectBoxDTO> getMaterias(String cursoId) throws ValidationException {
-        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
-
-        Curso curso = cursoRepository.findCursoById(ConverterHelper.convertStringToLong
-                (cursoId));
-
-        if (curso == null) {
-            throw new ValidationException();
-        }
-
-        List<Materia> materias = materiaRepository.findAllByCursos(curso);
-
-        if (materias == null) {
-            throw new ValidationException();
-        }
-
-        for (Materia materia : materias) {
-            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                    (materia.getId()), materia.getNome()));
-        }
-        return selectBoxList;
-    }
-
-    public List<SelectBoxDTO> getStatusMateria() throws ValidationException {
-        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
-
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (StatusEnum.CURSADA.getId()), StatusEnum.CURSADA.getDescricao()));
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (StatusEnum.CURSANDO.getId()), StatusEnum.CURSANDO.getDescricao()));
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (StatusEnum.NAO_CURSADA.getId()), StatusEnum.NAO_CURSADA.getDescricao()));
+        for (Curso curso : cursos)
+            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString(curso.getId()), curso.getNome()));
 
         return selectBoxList;
     }
 
-    public List<SelectBoxDTO> getLembretes(String usuarioId) throws ValidationException {
+    public List<SelectBoxDTO> getMaterias(long cursoId) {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
-        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
-                .convertStringToLong(usuarioId));
+        Curso curso = cursoRepository.findCursoById(cursoId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O curso de id \"" + cursoId + "\" não foi encontrado"));
 
-        List<Lembrete> lembretes = lembreteRepository.findLembreteByUsuario(usuario);
+        List<Materia> materias = materiaRepository.findAllByCursos(curso).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "As materias do curso \"" + curso.getNome() + "\" não foram encontradas"));
 
-        if (lembretes == null)
-            throw new ValidationException();
+        for (Materia materia : materias)
+            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString(materia.getId()), materia.getNome()));
+
+        return selectBoxList;
+    }
+
+    public List<SelectBoxDTO> getStatusMateria() {
+        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
+
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(StatusEnum.CURSADA.getId()),
+                StatusEnum.CURSADA.getDescricao()
+            )
+        );
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(StatusEnum.CURSANDO.getId()),
+                StatusEnum.CURSANDO.getDescricao()
+         )
+        );
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(StatusEnum.NAO_CURSADA.getId()),
+                StatusEnum.NAO_CURSADA.getDescricao()
+            )
+        );
+
+        return selectBoxList;
+    }
+
+    public List<SelectBoxDTO> getLembretes(long usuarioId) {
+        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
+
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O usuario de id \"" + usuarioId + "\" não foi encontrado"));
+
+        List<Lembrete> lembretes = lembreteRepository.findLembreteByUsuario(usuario).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "Os lembretes do usuario \"" + usuario.getNome() + "\" não foram encontrados"));
 
         for (Lembrete lembrete : lembretes) {
             selectBoxList.add(new SelectBoxDTO(lembrete.getId().toString(),
@@ -100,23 +108,35 @@ public class SelectBoxService {
         return selectBoxList;
     }
 
-    public List<SelectBoxDTO> getLembreteType() throws ValidationException {
+    public List<SelectBoxDTO> getLembreteType() {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (LembreteTypeEnum.PROVA.getId()), LembreteTypeEnum.PROVA.getDescricao()));
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (LembreteTypeEnum.TRABALHO.getId()), LembreteTypeEnum.TRABALHO.getDescricao()));
-        selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                (LembreteTypeEnum.OUTROS.getId()), LembreteTypeEnum.OUTROS.getDescricao()));
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(LembreteTypeEnum.PROVA.getId()),
+                LembreteTypeEnum.PROVA.getDescricao()
+            )
+        );
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(LembreteTypeEnum.TRABALHO.getId()),
+                LembreteTypeEnum.TRABALHO.getDescricao()
+            )
+        );
+        selectBoxList.add(new SelectBoxDTO(
+                ConverterHelper.convertLongToString(LembreteTypeEnum.OUTROS.getId()),
+                LembreteTypeEnum.OUTROS.getDescricao()
+            )
+        );
 
         return selectBoxList;
     }
 
-    public List<SelectBoxDTO> getMateriasUsuario(String usuarioId) throws ValidationException {
+    public List<SelectBoxDTO> getMateriasUsuario(long usuarioId) {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
-        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper.convertStringToLong(usuarioId));
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "O usuario de id \"" + usuarioId + "\" não foi encontrado"));
+
         List<UsuarioMateria> usuarioMaterias = usuario.getMaterias();
         List<Materia> materias = new ArrayList<>();
 
@@ -127,12 +147,11 @@ public class SelectBoxService {
         }
 
         for (Materia materia : materias) {
-            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
-                    (materia.getId()), materia.getNome()));
+            selectBoxList.add(new SelectBoxDTO(
+                    ConverterHelper.convertLongToString(materia.getId()), materia.getNome()
+                )
+            );
         }
         return selectBoxList;
     }
-
-
-
 }

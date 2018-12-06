@@ -1,11 +1,14 @@
 package com.projeto.saara.controllers;
 
 import com.projeto.saara.dto.output.SelectBoxDTO;
-import com.projeto.saara.helpers.ValidationException;
+import com.projeto.saara.exceptions.ValidationException;
+import com.projeto.saara.helpers.ConverterHelper;
+import com.projeto.saara.helpers.Resposta;
 import com.projeto.saara.services.SelectBoxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,15 +18,18 @@ import java.util.List;
 @RequestMapping("/selectBox")
 public class SelectBoxController {
 
+    private final SelectBoxService selectBoxService;
+
     @Autowired
-    private SelectBoxService selectBoxService;
+    public SelectBoxController(SelectBoxService selectBoxService) {
+        this.selectBoxService = selectBoxService;
+    }
 
     /**
      * @return lista de cursos existentes
-     * @throws ValidationException
      */
     @GetMapping("/getCursos")
-    public ResponseEntity<List<SelectBoxDTO>> getCursos() throws ValidationException {
+    public ResponseEntity<List<SelectBoxDTO>> getCursos() {
 
         List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getCursos();
 
@@ -31,17 +37,13 @@ public class SelectBoxController {
     }
 
     /**
-     * @param cursoId
+     * @param cursoId id do curso
      * @return lista de materias relacionadas ao curso
-     * @throws ValidationException
      */
     @GetMapping("/getMaterias")
-    public ResponseEntity<List<SelectBoxDTO>> getMaterias(String cursoId) throws
-            ValidationException {
-
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getMaterias(cursoId);
-
-        return ResponseEntity.ok().body(selectBoxDTOList);
+    public ResponseEntity<Object> getMaterias(String cursoId)
+    {
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getMaterias(ConverterHelper.convertStringToLong(cursoId))));
     }
 
     /**
@@ -49,53 +51,38 @@ public class SelectBoxController {
      * ao usuario
      */
     @GetMapping("/getStatusMateria")
-    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria()
-            throws ValidationException {
-
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getStatusMateria();
-
-        return ResponseEntity.ok().body(selectBoxDTOList);
+    public ResponseEntity<Object> getStatusMateria()
+    {
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getStatusMateria()));
     }
 
     /**
-     * @param usuarioId
+     * @param usuarioId id do usuario
      * @return lista de lembretes do usuario
-     * @throws ValidationException
      */
     @GetMapping("/getLembretes")
-    public ResponseEntity<List<SelectBoxDTO>> getLembretes(String usuarioId) throws
-            ValidationException {
-
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getLembretes(usuarioId);
-
-        return ResponseEntity.ok().body(selectBoxDTOList);
+    public ResponseEntity<Object> getLembretes(String usuarioId)
+    {
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getLembretes(ConverterHelper.convertStringToLong(usuarioId))));
     }
 
     /**
      * @return lista de tipos de lembretes
-     * @throws ValidationException
      */
     @GetMapping("/getLembreteType")
-    public ResponseEntity<List<SelectBoxDTO>> getLembreteType() throws
-            ValidationException {
-
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.getLembreteType();
-
-        return ResponseEntity.ok().body(selectBoxDTOList);
+    public ResponseEntity<Object> getLembreteType()
+    {
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getLembreteType()));
     }
 
     /**
-     * @param usuarioId
+     * @param usuarioId id do usuario
      * @return lista de materias que o usuario está cursando
-     * @throws ValidationException
      */
-    @GetMapping("/getMaterias/{id}")
-    public ResponseEntity<List<SelectBoxDTO>> getMateriasUsuario(String usuarioId)
-            throws ValidationException {
-
-        List<SelectBoxDTO> selectBoxDTOList = selectBoxService.
-                getMateriasUsuario(usuarioId);
-        return ResponseEntity.ok().body(selectBoxDTOList);
+    @GetMapping("/getMaterias/{usuarioId}")
+    public ResponseEntity<Object> getMateriasUsuario(@PathVariable String usuarioId)
+    {
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getMateriasUsuario(ConverterHelper.convertStringToLong(usuarioId))));
     }
 
     //TODO: criar selectBox para selecionar dia, mes, ano, hora, min e seg
