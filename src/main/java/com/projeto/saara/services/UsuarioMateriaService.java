@@ -196,7 +196,8 @@ public class UsuarioMateriaService {
         UsuarioMateria usuarioMateria =
                 usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
                         new ObjetoNaoEncontradoException(
-                                "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+                                "Usuario_materia de id \"" + usuarioMateriaId + "\" " +
+                                        "não foi encontrado"));
 
         Materia materia = usuarioMateria.getMateria();
         Aula aula = new Aula();
@@ -209,5 +210,18 @@ public class UsuarioMateriaService {
 
         materia.getAulas().add(aula);
         materiaRepository.saveAndFlush(materia);
+    }
+
+    public void atualizarAula(Long aulaId, AulaDTO dto) {
+
+        Aula aula = aulaRepository.findAulaById(aulaId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "Aula de id \"" + aulaId + "\" não foi encontrada"));
+
+        aula.setDia(ConverterHelper.convertStringToLong(dto.getDia()));
+        aula.setHorario(dto.getHorario());
+        aula.setLocal(dto.getLocal());
+        aula.setProfessor(dto.getProfessor());
+        aulaRepository.saveAndFlush(aula);
     }
 }

@@ -196,4 +196,10 @@ public class UsuarioController {
         usuarioMateriaService.adicionarAula(ConverterHelper.convertStringToLong(usuarioMateriaId), dto);
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
+
+    @PutMapping("/atualizarAula/{aulaId}")
+    public ResponseEntity<Object> adicionarAula(String aulaId, AulaDTO dto) {
+        usuarioMateriaService.atualizarAula(ConverterHelper.convertStringToLong(aulaId), dto);
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
+    }
 }
