@@ -25,8 +25,7 @@ public class Usuario implements Serializable {
     @Column(name = "SENHA")
     private String senha;
 
-    //@Column(name = "CURSO_ID")
-    @ManyToOne(targetEntity = Curso.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Curso.class)
     private Curso curso;
 
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class)

@@ -17,19 +17,17 @@ public class UsuarioMateria implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    //@Column(name = "MATERIA_ID")
-    @ManyToOne(targetEntity = Materia.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Materia.class)
     private Materia materia;
 
-    //@Column(name = "USUARIO_ID")
-    @ManyToOne(targetEntity = Usuario.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
     private Usuario usuario;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Nota> notas;
 
     @Column(name = "STATUS")
-    private StatusEnum status;
+    private Long status;
 
     @Column(name = "MEDIA")
     private double media;

@@ -33,7 +33,7 @@ public class LembreteService {
     public List<LembreteDTO> getLembretes(long usuarioId) {
 
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException("Usuario de id \"" + usuarioId + "\" não encontrado"));
+                new ObjetoNaoEncontradoException("Usuario de id \"" + usuarioId + "\" não encontrado"));
 
         List<LembreteDTO> lembreteDTOS = new ArrayList<>();
         List<Lembrete> lembretes = lembreteRepository.findLembreteByUsuario(usuario).orElseThrow(() ->
@@ -41,7 +41,8 @@ public class LembreteService {
 
         for (Lembrete lembrete : lembretes) { //TODO fazer isso aqui com o mapper
             LembreteDTO lembreteDTO = new LembreteDTO();
-            lembreteDTO.setTipo(lembrete.getTipo().getDescricao());
+            lembreteDTO.setTipo(ConverterHelper.convertIdToLembreteTypeEnum(lembrete
+                    .getTipo()).getDescricao());
             lembreteDTO.setAssunto(lembrete.getAssunto());
             if (lembrete.getTexto() != null) {
                 lembreteDTO.setTexto(lembrete.getTexto());
@@ -69,7 +70,8 @@ public class LembreteService {
                 new ObjetoNaoEncontradoException("O lembrete de id \"" + lembreteId + "\" não foi encontrado"));
 
         lembreteDTO = new LembreteDTO();
-        lembreteDTO.setTipo(lembrete.getTipo().getDescricao());
+        lembreteDTO.setTipo(ConverterHelper.convertIdToLembreteTypeEnum(lembrete
+                .getTipo()).getDescricao());
         lembreteDTO.setAssunto(lembrete.getAssunto());
         if (lembrete.getTexto() != null) {
             lembreteDTO.setTexto(lembrete.getTexto());

@@ -19,7 +19,7 @@ public class Lembrete implements Serializable {
     private Long id;
 
     @Column(name = "TIPO")
-    private LembreteTypeEnum tipo;
+    private Long tipo;
 
     @Column(name = "ASSUNTO")
     private String assunto;

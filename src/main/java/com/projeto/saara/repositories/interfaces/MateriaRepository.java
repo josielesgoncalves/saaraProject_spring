@@ -9,7 +9,5 @@ import java.util.Optional;
 
 public interface MateriaRepository extends JpaRepository<Materia, Long> {
 
-    Optional<List<Materia>> findAllByCursos(Curso curso);
-
     Optional<Materia> getMateriaById(Long id);
 }

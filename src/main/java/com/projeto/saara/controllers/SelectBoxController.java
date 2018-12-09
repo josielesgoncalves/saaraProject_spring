@@ -1,7 +1,6 @@
 package com.projeto.saara.controllers;
 
 import com.projeto.saara.dto.output.SelectBoxDTO;
-import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.helpers.Resposta;
 import com.projeto.saara.services.SelectBoxService;
@@ -40,10 +39,11 @@ public class SelectBoxController {
      * @param cursoId id do curso
      * @return lista de materias relacionadas ao curso
      */
-    @GetMapping("/getMaterias")
+    @GetMapping("/getMaterias")//TODO: BUSCAR MATERIAS POR CURSO E SEMESTRE
     public ResponseEntity<Object> getMaterias(String cursoId)
     {
-        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getMaterias(ConverterHelper.convertStringToLong(cursoId))));
+        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService
+                .getMaterias(ConverterHelper.convertStringToLong(cursoId))));
     }
 
     /**

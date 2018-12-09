@@ -46,8 +46,8 @@ public class UsuarioMateriaService {
 
         List<UsuarioMateria> usuarioMaterias =
                 usuarioMateriaRepository.findUsuarioMateriaByUsuario(usuario).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException(
-                        "As usuariomMateria do usuario \"" + usuarioId + "\" não foram encontradas"));
+                        new ObjetoNaoEncontradoException(
+                                "As usuariomMateria do usuario \"" + usuarioId + "\" não foram encontradas"));
 
         for (UsuarioMateria uMateria : usuarioMaterias) {
 
@@ -55,7 +55,8 @@ public class UsuarioMateriaService {
             usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
                     (uMateria.getMateria().getId()));
             usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString(usuarioId));
-            usuarioMateriaDTO.setStatusId(uMateria.getStatus().getDescricao());
+            usuarioMateriaDTO.setStatusId(ConverterHelper.convertIdToStatusEnum(uMateria.getStatus())
+                    .getDescricao());
             usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString
                     (uMateria.getMedia()));
 
@@ -78,14 +79,15 @@ public class UsuarioMateriaService {
 
         UsuarioMateria usuarioMateria =
                 usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException(
-                        "Aa usuariomMateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+                        new ObjetoNaoEncontradoException(
+                                "Aa usuariomMateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
 
         usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
                 (usuarioMateria.getMateria().getId()));
         usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString
                 (usuarioMateria.getUsuario().getId()));
-        usuarioMateriaDTO.setStatusId(usuarioMateria.getStatus().getDescricao());
+        usuarioMateriaDTO.setStatusId(ConverterHelper.convertIdToStatusEnum(usuarioMateria.getStatus())
+                .getDescricao());
         usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString
                 (usuarioMateria.getMedia()));
 
@@ -112,7 +114,7 @@ public class UsuarioMateriaService {
                     (nota.getPesoNota()));
             notaDTO.setValor(ConverterHelper.convertDoubleToString(nota
                     .getValor()));
-            notaDTO.setTipo(nota.getTipo().getDescricao());
+            notaDTO.setTipo(ConverterHelper.convertIdToNotaTypeEnum(nota.getTipo()).getDescricao());
             notaDTOS.add(notaDTO);
         }
 
@@ -123,11 +125,11 @@ public class UsuarioMateriaService {
 
         UsuarioMateria usuarioMateria =
                 usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException(
-                        "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+                        new ObjetoNaoEncontradoException(
+                                "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
 
         Long statusId = ConverterHelper.convertStringToLong(dto.getStatusId());
-        usuarioMateria.setStatus(ConverterHelper.convertIdToStatusEnum(statusId));
+        usuarioMateria.setStatus(statusId);
         //TODO isso aqui ta salvando?
     }
 
@@ -159,8 +161,8 @@ public class UsuarioMateriaService {
 
         UsuarioMateria usuarioMateria =
                 usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException(
-                        "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+                        new ObjetoNaoEncontradoException(
+                                "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
 
         List<AulaDTO> aulaDTOS = new ArrayList<>();
 
@@ -175,7 +177,7 @@ public class UsuarioMateriaService {
 
         AulaDTO aulaDTO = new AulaDTO();
         aulaDTO.setData(ConverterHelper.convertCalendarToString(aula.getDataHorario()));
-        aulaDTO.setDia(aula.getDia().getDescricao());
+        aulaDTO.setDia(ConverterHelper.convertIdToDiaEnum(aula.getDia()).getDescricao());
         aulaDTO.setLocal(aula.getLocal());
         aulaDTO.setProfessor(aula.getProfessor());
 

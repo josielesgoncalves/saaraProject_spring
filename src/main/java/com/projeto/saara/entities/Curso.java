@@ -19,8 +19,6 @@ public class Curso implements Serializable {
     @Column(name = "NOME")
     private String nome;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Materia.class)
-    private List<Materia> materias;
 
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Usuario.class)
     private List<Usuario> usuarios;

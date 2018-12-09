@@ -6,6 +6,7 @@ import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.repositories.interfaces.AulaRepository;
+import com.projeto.saara.repositories.interfaces.MateriaCursoRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,15 @@ public class CursoService {
 
     private final MateriaRepository materiaRepository;
 
-    private final AulaRepository aulaRepository;
+    private final MateriaCursoRepository materiaCursoRepository;
 
     @Autowired
-    public CursoService(UsuarioRepository usuarioRepository, MateriaRepository materiaRepository, AulaRepository aulaRepository) {
+    public CursoService(UsuarioRepository usuarioRepository,
+                        MateriaRepository materiaRepository,
+                        MateriaCursoRepository materiaCursoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.materiaRepository = materiaRepository;
-        this.aulaRepository = aulaRepository;
+        this.materiaCursoRepository = materiaCursoRepository;
     }
 
     /**
@@ -39,7 +42,8 @@ public class CursoService {
                 new ObjetoNaoEncontradoException("Usuario de id \"" + usuarioId + "\" não encontrado"));
 
         Curso curso = usuario.getCurso();
-        List<Materia> materias = materiaRepository.findAllByCursos(curso).orElseThrow(() ->
+        List<MateriaCurso> materias = materiaCursoRepository.findAllByCurso(curso).orElseThrow(
+                () ->
                 new ObjetoNaoEncontradoException("As materias do curso \"" + curso.getNome() + "\" não foram encontradas"));
 
         List<UsuarioMateria> materiasConcluidas = new ArrayList<>();

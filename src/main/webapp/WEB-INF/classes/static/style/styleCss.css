@@ -1,0 +1,19 @@
+.login {
+    text-align: center;
+    box-shadow: 0px 0px 5px grey;
+    padding-top: 20px;
+    padding-left: 20px;
+    margin-bottom: 60px;
+}
+
+
+html{
+    background-color: #80cbc4 ;
+}
+
+.error{
+    color: red;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 45px;
+}

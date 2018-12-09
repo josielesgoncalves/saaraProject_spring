@@ -30,8 +30,6 @@ public class Aula implements Serializable {
     private String local;
 
     @Column(name = "DIA")
-    private DiaEnum dia;
+    private Long dia;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Materia.class)
-    private Materia materia;
 }

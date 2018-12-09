@@ -19,11 +19,6 @@ public class Materia implements Serializable {
     @Column(name = "NOME")
     private String nome;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Curso> cursos;
-
     @OneToMany(fetch = FetchType.LAZY)
     private List<Aula> aulas;
-
-
 }

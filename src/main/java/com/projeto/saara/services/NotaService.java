@@ -54,7 +54,8 @@ public class NotaService {
         notaDTO.setNotaId(ConverterHelper.convertLongToString(nota.getId()));
         notaDTO.setPesoNota(ConverterHelper.convertDoubleToString(nota.getPesoNota()));
         notaDTO.setValor(ConverterHelper.convertDoubleToString(nota.getValor()));
-        notaDTO.setTipo(nota.getTipo().getDescricao());
+        notaDTO.setTipo(ConverterHelper.convertIdToNotaTypeEnum(nota.getTipo())
+                .getDescricao());
 
         return notaDTO;
     }
@@ -75,11 +76,11 @@ public class NotaService {
         nota.setValor(ConverterHelper.convertStringToDouble(dto.getValor()));
 
         if (dto.getTipo() == null) {
-            nota.setTipo(NotaTypeEnum.OUTROS);
+            nota.setTipo(NotaTypeEnum.OUTROS.getId());
         }
 
         Long tipoNotaId = ConverterHelper.convertStringToLong(dto.getTipo());
-        nota.setTipo(ConverterHelper.convertIdToNotaTypeEnum(tipoNotaId));
+        nota.setTipo(tipoNotaId);
         notaRepository.saveAndFlush(nota);
 
         List<Nota> notas = new ArrayList<>();

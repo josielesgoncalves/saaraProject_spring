@@ -37,7 +37,7 @@ public class NewLembreteDTO {
             throw new ParametroInvalidoException("Tipo nulo");
 
         Long tipoId = ConverterHelper.convertStringToLong(this.getTipo());
-        lembrete.setTipo(ConverterHelper.convertIdToLembreteTypeEnum(tipoId));
+        lembrete.setTipo(tipoId);
 
         if (this.assunto == null)
             throw new ParametroInvalidoException("Assunto nulo");

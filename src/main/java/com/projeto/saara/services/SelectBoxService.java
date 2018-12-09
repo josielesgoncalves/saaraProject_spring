@@ -7,10 +7,7 @@ import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.exceptions.ValidationException;
-import com.projeto.saara.repositories.interfaces.CursoRepository;
-import com.projeto.saara.repositories.interfaces.LembreteRepository;
-import com.projeto.saara.repositories.interfaces.MateriaRepository;
-import com.projeto.saara.repositories.interfaces.UsuarioRepository;
+import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +20,21 @@ public class SelectBoxService {
 
     private final CursoRepository cursoRepository;
 
-    private final MateriaRepository materiaRepository;
+    private final MateriaCursoRepository materiaCursoRepository;
 
     private final UsuarioRepository usuarioRepository;
 
     private final LembreteRepository lembreteRepository;
 
     @Autowired
-    public SelectBoxService(CursoRepository cursoRepository, MateriaRepository materiaRepository, UsuarioRepository usuarioRepository, LembreteRepository lembreteRepository) {
+    public SelectBoxService(CursoRepository cursoRepository,
+                            UsuarioRepository usuarioRepository,
+                            LembreteRepository lembreteRepository,
+                            MateriaCursoRepository materiaCursoRepository) {
         this.cursoRepository = cursoRepository;
-        this.materiaRepository = materiaRepository;
         this.usuarioRepository = usuarioRepository;
         this.lembreteRepository = lembreteRepository;
+        this.materiaCursoRepository = materiaCursoRepository;
     }
 
     public List<SelectBoxDTO> getCursos() {
@@ -58,12 +58,14 @@ public class SelectBoxService {
                 new ObjetoNaoEncontradoException(
                         "O curso de id \"" + cursoId + "\" não foi encontrado"));
 
-        List<Materia> materias = materiaRepository.findAllByCursos(curso).orElseThrow(() ->
-                new ObjetoNaoEncontradoException(
-                        "As materias do curso \"" + curso.getNome() + "\" não foram encontradas"));
+        List<MateriaCurso> materias = materiaCursoRepository.findAllByCurso(curso)
+                .orElseThrow(() ->
+                        new ObjetoNaoEncontradoException(
+                                "As materias do curso \"" + curso.getNome() + "\" não foram encontradas"));
 
-        for (Materia materia : materias)
-            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString(materia.getId()), materia.getNome()));
+        for (MateriaCurso materiaCurso : materias)
+            selectBoxList.add(new SelectBoxDTO(ConverterHelper.convertLongToString
+                    (materiaCurso.getMateria().getId()), materiaCurso.getMateria().getNome()));
 
         return selectBoxList;
     }
@@ -72,19 +74,19 @@ public class SelectBoxService {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(StatusEnum.CURSADA.getId()),
-                StatusEnum.CURSADA.getDescricao()
-            )
+                        ConverterHelper.convertLongToString(StatusEnum.CURSADA.getId()),
+                        StatusEnum.CURSADA.getDescricao()
+                )
         );
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(StatusEnum.CURSANDO.getId()),
-                StatusEnum.CURSANDO.getDescricao()
-         )
+                        ConverterHelper.convertLongToString(StatusEnum.CURSANDO.getId()),
+                        StatusEnum.CURSANDO.getDescricao()
+                )
         );
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(StatusEnum.NAO_CURSADA.getId()),
-                StatusEnum.NAO_CURSADA.getDescricao()
-            )
+                        ConverterHelper.convertLongToString(StatusEnum.NAO_CURSADA.getId()),
+                        StatusEnum.NAO_CURSADA.getDescricao()
+                )
         );
 
         return selectBoxList;
@@ -112,19 +114,19 @@ public class SelectBoxService {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(LembreteTypeEnum.PROVA.getId()),
-                LembreteTypeEnum.PROVA.getDescricao()
-            )
+                        ConverterHelper.convertLongToString(LembreteTypeEnum.PROVA.getId()),
+                        LembreteTypeEnum.PROVA.getDescricao()
+                )
         );
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(LembreteTypeEnum.TRABALHO.getId()),
-                LembreteTypeEnum.TRABALHO.getDescricao()
-            )
+                        ConverterHelper.convertLongToString(LembreteTypeEnum.TRABALHO.getId()),
+                        LembreteTypeEnum.TRABALHO.getDescricao()
+                )
         );
         selectBoxList.add(new SelectBoxDTO(
-                ConverterHelper.convertLongToString(LembreteTypeEnum.OUTROS.getId()),
-                LembreteTypeEnum.OUTROS.getDescricao()
-            )
+                        ConverterHelper.convertLongToString(LembreteTypeEnum.OUTROS.getId()),
+                        LembreteTypeEnum.OUTROS.getDescricao()
+                )
         );
 
         return selectBoxList;
@@ -148,8 +150,8 @@ public class SelectBoxService {
 
         for (Materia materia : materias) {
             selectBoxList.add(new SelectBoxDTO(
-                    ConverterHelper.convertLongToString(materia.getId()), materia.getNome()
-                )
+                            ConverterHelper.convertLongToString(materia.getId()), materia.getNome()
+                    )
             );
         }
         return selectBoxList;

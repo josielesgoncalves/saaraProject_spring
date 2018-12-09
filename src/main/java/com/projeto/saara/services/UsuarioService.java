@@ -102,10 +102,9 @@ public class UsuarioService {
                             "A materia de id \"" + item.getMateriaId() + "\" não foi encontrada"));
 
             Long statusId = ConverterHelper.convertStringToLong(item.getStatusId());
-            StatusEnum status = ConverterHelper.convertIdToStatusEnum(statusId);
             UsuarioMateria usuarioMateria = new UsuarioMateria();
             usuarioMateria.setMateria(materia);
-            usuarioMateria.setStatus(status);
+            usuarioMateria.setStatus(statusId);
 
             usuarioMaterias.add(usuarioMateria);
         }

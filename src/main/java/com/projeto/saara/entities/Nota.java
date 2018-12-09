@@ -22,10 +22,8 @@ public class Nota {
     private double pesoNota;
 
     @Column(name = "TIPO")
-    private NotaTypeEnum tipo;
+    private Long tipo;
 
-    //@Column(name = "USUARIO_MATERIA_ID")
-    @ManyToOne(targetEntity = UsuarioMateria.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class)
     private UsuarioMateria usuarioMateria;
-
 }
