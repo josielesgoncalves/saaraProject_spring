@@ -1,19 +1,15 @@
 package com.projeto.saara.services;
 
+import com.projeto.saara.dto.input.NewAulaDTO;
 import com.projeto.saara.dto.output.AulaDTO;
 import com.projeto.saara.dto.output.NotaDTO;
 import com.projeto.saara.dto.output.UsuarioMateriaDTO;
-import com.projeto.saara.entities.Aula;
-import com.projeto.saara.entities.Nota;
-import com.projeto.saara.entities.Usuario;
-import com.projeto.saara.entities.UsuarioMateria;
+import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.exceptions.ValidationException;
-import com.projeto.saara.repositories.interfaces.NotaRepository;
-import com.projeto.saara.repositories.interfaces.UsuarioMateriaRepository;
-import com.projeto.saara.repositories.interfaces.UsuarioRepository;
+import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +25,21 @@ public class UsuarioMateriaService {
 
     private final NotaRepository notaRepository;
 
+    private final AulaRepository aulaRepository;
+
+    private final MateriaRepository materiaRepository;
+
     @Autowired
-    public UsuarioMateriaService(UsuarioMateriaRepository usuarioMateriaRepository, UsuarioRepository usuarioRepository, NotaRepository notaRepository) {
+    public UsuarioMateriaService(UsuarioMateriaRepository usuarioMateriaRepository,
+                                 UsuarioRepository usuarioRepository,
+                                 NotaRepository notaRepository,
+                                 AulaRepository aulaRepository,
+                                 MateriaRepository materiaRepository) {
         this.usuarioMateriaRepository = usuarioMateriaRepository;
         this.usuarioRepository = usuarioRepository;
         this.notaRepository = notaRepository;
+        this.aulaRepository = aulaRepository;
+        this.materiaRepository = materiaRepository;
     }
 
     public List<UsuarioMateriaDTO> getUsuarioMaterias(long usuarioId) {
@@ -130,7 +136,8 @@ public class UsuarioMateriaService {
 
         Long statusId = ConverterHelper.convertStringToLong(dto.getStatusId());
         usuarioMateria.setStatus(statusId);
-        //TODO isso aqui ta salvando?
+
+        usuarioMateriaRepository.saveAndFlush(usuarioMateria);
     }
 
     //getAulas por dia
@@ -176,11 +183,31 @@ public class UsuarioMateriaService {
     private AulaDTO setAulaDTO(Aula aula) throws ValidationException {
 
         AulaDTO aulaDTO = new AulaDTO();
-        aulaDTO.setData(ConverterHelper.convertCalendarToString(aula.getDataHorario()));
+        aulaDTO.setHorario(aula.getHorario());
         aulaDTO.setDia(ConverterHelper.convertIdToDiaEnum(aula.getDia()).getDescricao());
         aulaDTO.setLocal(aula.getLocal());
         aulaDTO.setProfessor(aula.getProfessor());
 
         return aulaDTO;
+    }
+
+    public void adicionarAula(Long usuarioMateriaId, NewAulaDTO dto) {
+
+        UsuarioMateria usuarioMateria =
+                usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
+                        new ObjetoNaoEncontradoException(
+                                "A usuariomateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
+
+        Materia materia = usuarioMateria.getMateria();
+        Aula aula = new Aula();
+
+        aula.setDia(ConverterHelper.convertStringToLong(dto.getDiaSemanaId()));
+        aula.setHorario(dto.getHorario());
+        aula.setLocal(dto.getLocal());
+        aula.setProfessor(dto.getProfessor());
+        aulaRepository.saveAndFlush(aula);
+
+        materia.getAulas().add(aula);
+        materiaRepository.saveAndFlush(materia);
     }
 }

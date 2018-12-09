@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
 
 @Entity
 @Table(name="AULA")
@@ -19,13 +18,12 @@ public class Aula implements Serializable {
     @Column(name = "PROFESSOR")
     private String professor;
 
-    @Column(name = "DATA_HORARIO")
-    private Calendar dataHorario;
+    @Column(name = "HORARIO")
+    private String horario;
 
     @Column(name = "LOCAL")
     private String local;
 
     @Column(name = "DIA")
     private Long dia;
-
 }

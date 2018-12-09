@@ -9,10 +9,10 @@ public class AulaDTO implements Serializable {
 
     private String professor;
 
-    private String data;
-
     private String local;
 
     private String dia;
+
+    private String horario;
 
 }

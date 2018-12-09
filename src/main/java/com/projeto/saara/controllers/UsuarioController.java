@@ -1,5 +1,6 @@
 package com.projeto.saara.controllers;
 
+import com.projeto.saara.dto.input.NewAulaDTO;
 import com.projeto.saara.dto.input.NewNotaDTO;
 import com.projeto.saara.dto.output.*;
 import com.projeto.saara.dto.input.NewLembreteDTO;
@@ -32,7 +33,10 @@ public class UsuarioController {
     private final CursoService cursoService;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService, LembreteService lembreteService, UsuarioMateriaService usuarioMateriaService, NotaService notaService, CursoService cursoService) {
+    public UsuarioController(UsuarioService usuarioService,
+                             LembreteService lembreteService,
+                             UsuarioMateriaService usuarioMateriaService,
+                             NotaService notaService, CursoService cursoService) {
         this.usuarioService = usuarioService;
         this.lembreteService = lembreteService;
         this.usuarioMateriaService = usuarioMateriaService;
@@ -120,11 +124,11 @@ public class UsuarioController {
 
     /**
      * @param usuarioMateriaId usuarioMateriaId
-     * @param notaId notaid
+     * @param notaId           notaid
      * @return nota do usuario relacionada a materia dele
      */
     @GetMapping("/getMaterias/{usuarioMateriaId}/getNota/{notaId}")
-    public ResponseEntity<Object> getNota(@PathVariable String usuarioMateriaId,@PathVariable String notaId) {
+    public ResponseEntity<Object> getNota(@PathVariable String usuarioMateriaId, @PathVariable String notaId) {
 
         NotaDTO dto = notaService.getNota(ConverterHelper.convertStringToLong(usuarioMateriaId), ConverterHelper.convertStringToLong(notaId));
         return ResponseEntity.ok().body(new Resposta(0, "", dto));
@@ -134,7 +138,7 @@ public class UsuarioController {
      * Adiciona nota e calcula média do usuario
      *
      * @param usuarioMateriaId usuariomateriaId
-     * @param dto NotaDTO
+     * @param dto              NotaDTO
      * @return vazio
      */
     @PostMapping("/adicionarNota")
@@ -165,11 +169,11 @@ public class UsuarioController {
 
     /**
      * @param usuarioId usuarioid
-     * @param diaId diaid
+     * @param diaId     diaid
      * @return lista de aulas do dia selecionado
      */
     @GetMapping("/getAulasDia")
-    public ResponseEntity<Object> getAulasDia(String usuarioId, String diaId){
+    public ResponseEntity<Object> getAulasDia(String usuarioId, String diaId) {
 
         List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasDia(ConverterHelper.convertStringToLong(usuarioId), ConverterHelper.convertStringToLong(diaId));
         return ResponseEntity.ok().body(new Resposta(0, "", aulaDTOS));
@@ -184,5 +188,12 @@ public class UsuarioController {
 
         List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasMateria(ConverterHelper.convertStringToLong(usuarioMateriaId));
         return ResponseEntity.ok().body(new Resposta(0, "", aulaDTOS));
+    }
+
+    @PostMapping("/adicionarAula")
+    public ResponseEntity<Object> adicionarAula(String usuarioMateriaId, @Valid
+    @RequestBody NewAulaDTO dto) {
+        usuarioMateriaService.adicionarAula(ConverterHelper.convertStringToLong(usuarioMateriaId), dto);
+        return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 }

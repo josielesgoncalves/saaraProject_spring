@@ -1,27 +1,13 @@
 package com.projeto.saara.dto.output;
 
-public class MateriaDTO {
+import lombok.Data;
 
-    String materiaId;
+import java.io.Serializable;
 
-    String nome;
+@Data
+public class MateriaDTO implements Serializable {
 
-    public MateriaDTO() {
-    }
+    private String materiaId;
 
-    public String getMateriaId() {
-        return materiaId;
-    }
-
-    public void setMateriaId(String materiaId) {
-        this.materiaId = materiaId;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    private String nome;
 }
