@@ -6,12 +6,10 @@ import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 

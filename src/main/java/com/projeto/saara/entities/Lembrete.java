@@ -1,12 +1,10 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.LembreteTypeEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 
 @Entity
 @Table(name = "LEMBRETE")

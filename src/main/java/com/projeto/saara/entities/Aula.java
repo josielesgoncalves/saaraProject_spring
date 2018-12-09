@@ -1,14 +1,10 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.DiaEnum;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
 
 @Entity
 @Table(name="AULA")

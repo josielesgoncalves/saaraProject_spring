@@ -4,18 +4,14 @@ import com.projeto.saara.dto.output.LembreteDTO;
 import com.projeto.saara.entities.Lembrete;
 import com.projeto.saara.entities.Usuario;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
-import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.LembreteRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.tags.Param;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LembreteService {

@@ -9,12 +9,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.text.ParseException;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewLembreteDTO {
+public class NewLembreteDTO implements Serializable {
 
     @NotBlank(message = "Campo obrigatório")
     private String tipo;

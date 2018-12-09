@@ -4,9 +4,7 @@ import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
-import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.exceptions.ParametroInvalidoException;
-import com.projeto.saara.exceptions.ValidationException;
 
 import java.text.DateFormat;
 import java.text.ParseException;

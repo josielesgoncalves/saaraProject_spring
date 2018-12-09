@@ -1,8 +1,12 @@
 package com.projeto.saara.dto.input;
 
-import javax.validation.constraints.NotBlank;
+import lombok.Data;
 
-public class NewNotaDTO {
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
+@Data
+public class NewNotaDTO implements Serializable {
 
     @NotBlank(message = "Campo obrigatório")
     private String valor;
@@ -13,27 +17,4 @@ public class NewNotaDTO {
     @NotBlank(message = "Campo obrigatório")
     private String tipo;
 
-    public String getValor() {
-        return valor;
-    }
-
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    public String getPesoNota() {
-        return pesoNota;
-    }
-
-    public void setPesoNota(String pesoNota) {
-        this.pesoNota = pesoNota;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 }

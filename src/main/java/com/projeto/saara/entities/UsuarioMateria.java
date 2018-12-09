@@ -1,6 +1,5 @@
 package com.projeto.saara.entities;
 
-import com.projeto.saara.enums.StatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -1,10 +1,12 @@
 package com.projeto.saara.dto.output;
 
-import com.projeto.saara.dto.output.NotaDTO;
+import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UsuarioMateriaDTO {
+@Data
+public class UsuarioMateriaDTO implements Serializable {
 
     private String usuarioMateriaId;
 
@@ -18,51 +20,4 @@ public class UsuarioMateriaDTO {
 
     private String media;
 
-    public String getUsuarioMateriaId() {
-        return usuarioMateriaId;
-    }
-
-    public void setUsuarioMateriaId(String usuarioMateriaId) {
-        this.usuarioMateriaId = usuarioMateriaId;
-    }
-
-    public String getMateriaId() {
-        return materiaId;
-    }
-
-    public void setMateriaId(String materiaId) {
-        this.materiaId = materiaId;
-    }
-
-    public String getUsuarioId() {
-        return usuarioId;
-    }
-
-    public void setUsuarioId(String usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-
-    public List<NotaDTO> getNotaDTOList() {
-        return notaDTOList;
-    }
-
-    public void setNotaDTOList(List<NotaDTO> notaDTOList) {
-        this.notaDTOList = notaDTOList;
-    }
-
-    public String getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(String statusId) {
-        this.statusId = statusId;
-    }
-
-    public String getMedia() {
-        return media;
-    }
-
-    public void setMedia(String media) {
-        this.media = media;
-    }
 }

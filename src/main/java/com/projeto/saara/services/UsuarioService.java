@@ -5,11 +5,9 @@ import com.projeto.saara.dto.output.UsuarioMateriaDTO;
 import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
 import com.projeto.saara.entities.*;
-import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.CursoRepository;
 import com.projeto.saara.repositories.interfaces.LembreteRepository;
 import com.projeto.saara.repositories.interfaces.MateriaRepository;
@@ -17,7 +15,6 @@ import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

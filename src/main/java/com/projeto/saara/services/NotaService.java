@@ -8,7 +8,6 @@ import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.NotaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioMateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;

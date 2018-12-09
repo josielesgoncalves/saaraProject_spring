@@ -3,12 +3,12 @@ package com.projeto.saara.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "MATERIA_CURSO")
 @Data
-public class MateriaCurso {
+public class MateriaCurso implements Serializable {
 
     @Id
     @GeneratedValue
