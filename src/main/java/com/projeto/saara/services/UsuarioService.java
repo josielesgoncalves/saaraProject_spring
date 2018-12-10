@@ -55,6 +55,10 @@ public class UsuarioService {
             dto.setEmail(usuario.getEmail());
             dto.setSenha(usuario.getSenha());
         }
+        else{
+            throw new ParametroInvalidoException("Senha incorreta");
+        }
+
         return dto;
     }
 
