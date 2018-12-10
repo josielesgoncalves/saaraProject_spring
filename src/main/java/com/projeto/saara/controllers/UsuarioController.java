@@ -66,10 +66,11 @@ public class UsuarioController {
      * @param email email do usuario
      * @return dados do usuário
      */
-    @GetMapping("/email")
-    public ResponseEntity<Object> getUsuario(@RequestParam(value = "value") String email) {
+    @GetMapping("/login")
+    public ResponseEntity<Object> getUsuario(@RequestParam(value = "email") String email,
+                                             @RequestParam(value = "senha") String senha) {
 
-        UsuarioDTO dto = usuarioService.buscarUsuario(email);
+        UsuarioDTO dto = usuarioService.logar(email, senha);
         return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 

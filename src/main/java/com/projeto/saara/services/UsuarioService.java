@@ -30,30 +30,31 @@ public class UsuarioService {
     private final LembreteRepository lembreteRepository;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, CursoRepository cursoRepository, MateriaRepository materiaRepository, LembreteRepository lembreteRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository,
+                          CursoRepository cursoRepository,
+                          MateriaRepository materiaRepository,
+                          LembreteRepository lembreteRepository) {
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
         this.materiaRepository = materiaRepository;
         this.lembreteRepository = lembreteRepository;
     }
 
-    public UsuarioDTO buscarUsuario(String login) {
+    public UsuarioDTO logar(String email, String senha) {
 
         UsuarioDTO dto = null;
-        final Usuario usuario = usuarioRepository.findUsuarioByEmail(login).orElseThrow(() ->
+        final Usuario usuario = usuarioRepository.findUsuarioByEmail(email).orElseThrow(() ->
                 new ObjetoNaoEncontradoException(
-                        "O usuario de email \"" + login + "\" não foi encontrado"));
+                        "\"" + email + "\" não encontrado"));
 
-       /* new UsuarioDTO(
-                ConverterHelper.convertLongToString(usuario.getId()),
-                usuario.getNome(),
-                usuario.getEmail(),
-                ConverterHelper.convertLongToString(usuario.getCurso().getId()),
-                usuario.getSenha(),
-                usuario.getSenha(),
-                new NewLembreteDTO()usuario.getLembretes()
-        );*/
-       //TODO aqui tava retornando sempre nulo, tentei criar o DTO mas ta confuso o dto de lembrete e a funcao criar la dentro
+        if(senha.equals(usuario.getSenha())){
+            dto = new UsuarioDTO();
+            dto.setUsuarioId(ConverterHelper.convertLongToString(usuario.getId()));
+            dto.setNome(usuario.getNome());
+            dto.setCursoId(ConverterHelper.convertLongToString(usuario.getCurso().getId()));
+            dto.setEmail(usuario.getEmail());
+            dto.setSenha(usuario.getSenha());
+        }
         return dto;
     }
 
@@ -72,7 +73,6 @@ public class UsuarioService {
                             "O curso de id \"" + dto.getCursoId() + "\" não foi encontrado"));
 
             usuario.setCurso(curso);
-
             usuarioRepository.saveAndFlush(usuario);
         }
     }

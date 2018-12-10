@@ -2,12 +2,14 @@ package com.projeto.saara.dto.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioDTO implements Serializable {
 
     private String usuarioId;
@@ -19,8 +21,6 @@ public class UsuarioDTO implements Serializable {
     private String cursoId;
 
     private String senha;
-
-    private String confirmSenha;
 
     private List<LembreteDTO> lembretes;
 }
