@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class Lembrete implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 

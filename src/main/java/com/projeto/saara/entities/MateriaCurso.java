@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class MateriaCurso implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
