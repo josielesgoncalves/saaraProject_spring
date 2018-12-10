@@ -66,7 +66,7 @@ public class UsuarioController {
      * @param email email do usuario
      * @return dados do usuário
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<Object> getUsuario(@RequestParam(value = "email") String email,
                                              @RequestParam(value = "senha") String senha) {
 
