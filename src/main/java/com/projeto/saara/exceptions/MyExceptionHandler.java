@@ -16,20 +16,26 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleObjetoNaoEcontratoException(RuntimeException ex, WebRequest request) {
     	ObjetoNaoEncontradoException exception = (ObjetoNaoEncontradoException) ex;
         Resposta resposta = new Resposta(exception.getCode(), exception.getMessage(), null);
-        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        System.out.println(resposta.getError());
+        exception.printStackTrace();
+        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.OK, request);
     }
     
     @ExceptionHandler(value = { ParametroInvalidoException.class })
     protected ResponseEntity<Object> handleParametroInvalidoException(RuntimeException ex, WebRequest request) {
     	ParametroInvalidoException exception = (ParametroInvalidoException) ex;
         Resposta resposta = new Resposta(exception.getCode(), exception.getMessage(), null);
-        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        System.out.println(resposta.getError());
+        exception.printStackTrace();
+        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.OK, request);
     }
 
     @ExceptionHandler(value = { ValidationException.class })
     protected ResponseEntity<Object> handleValidationException(RuntimeException ex, WebRequest request) {
         ValidationException exception = (ValidationException) ex;
         Resposta resposta = new Resposta(exception.getCode(), exception.getMessage(), null);
-        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        System.out.println(resposta.getError());
+        exception.printStackTrace();
+        return handleExceptionInternal(ex, resposta, new HttpHeaders(), HttpStatus.OK, request);
     }
 }

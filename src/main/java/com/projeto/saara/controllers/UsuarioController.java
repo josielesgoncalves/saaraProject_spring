@@ -5,6 +5,7 @@ import com.projeto.saara.dto.input.NewNotaDTO;
 import com.projeto.saara.dto.output.*;
 import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
+import com.projeto.saara.entities.UsuarioMateria;
 import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.helpers.Resposta;
@@ -105,10 +106,10 @@ public class UsuarioController {
      * @param usuarioId id do usuario
      * @return lista de matérias do usuário
      */
-    @GetMapping("/getMaterias")
-    public ResponseEntity<Object> getMaterias(String usuarioId) {
+    @PostMapping("/getMaterias")
+    public ResponseEntity<Object> getMaterias(@RequestParam(value = "usuarioId") String usuarioId) {
 
-        List<UsuarioMateriaDTO> dto = usuarioMateriaService.getUsuarioMaterias(ConverterHelper.convertStringToLong(usuarioId));
+        List<UsuarioMateria> dto = usuarioMateriaService.getUsuarioMaterias(ConverterHelper.convertStringToLong(usuarioId));
         return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 
@@ -116,8 +117,8 @@ public class UsuarioController {
      * @param usuarioMateriaId usuariomateriaId
      * @return detalhes da matéria relacionadas ao usuario
      */
-    @GetMapping("/getMaterias/{usuarioMateriaId}")
-    public ResponseEntity<Object> getMateria(@PathVariable String usuarioMateriaId) {
+    @GetMapping("/getMateria")
+    public ResponseEntity<Object> getMateria(@RequestParam(value = "usuarioMateriaId") String usuarioMateriaId) {
 
         UsuarioMateriaDTO dto = usuarioMateriaService.getUsuarioMateria(ConverterHelper.convertStringToLong(usuarioMateriaId));
         return ResponseEntity.ok().body(new Resposta(0, "", dto));

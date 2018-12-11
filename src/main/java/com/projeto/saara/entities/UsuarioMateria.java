@@ -1,5 +1,6 @@
 package com.projeto.saara.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "USUARIO_MATERIA")
 @Data
-public class UsuarioMateria implements Serializable {
+public class UsuarioMateria {
 
     @Id
     @GeneratedValue

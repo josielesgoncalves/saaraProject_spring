@@ -42,7 +42,7 @@ public class UsuarioMateriaService {
         this.materiaRepository = materiaRepository;
     }
 
-    public List<UsuarioMateriaDTO> getUsuarioMaterias(long usuarioId) {
+    public /*List<UsuarioMateriaDTO>*/ List<UsuarioMateria> getUsuarioMaterias(long usuarioId) {
 
         List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class UsuarioMateriaService {
                         new ObjetoNaoEncontradoException(
                                 "As usuariomMateria do usuario \"" + usuarioId + "\" não foram encontradas"));
 
-        for (UsuarioMateria uMateria : usuarioMaterias) {
+        /*for (UsuarioMateria uMateria : usuarioMaterias) {
 
             UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
             usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
@@ -66,17 +66,16 @@ public class UsuarioMateriaService {
             usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString
                     (uMateria.getMedia()));
 
-            List<Nota> notas = notaRepository.findNotasByUsuarioMateria(uMateria).orElseThrow(() ->
-                    new ObjetoNaoEncontradoException(
-                            "As notas do usuariomMateria \"" + uMateria.getId() + "\" não foram encontradas"));
+            List<Nota> notas = notaRepository.findNotasByUsuarioMateria(uMateria).orElse(new ArrayList<>());
 
             List<NotaDTO> notaDTOS = setNotaDTO(notas, uMateria);
             if (notaDTOS != null) {
                 usuarioMateriaDTO.setNotaDTOList(notaDTOS);
             }
-        }
 
-        return usuarioMateriaDTOS;
+            usuarioMateriaDTOS.add(usuarioMateriaDTO);
+        }*/
+        return usuarioMaterias;
     }
 
     public UsuarioMateriaDTO getUsuarioMateria(long usuarioMateriaId) {
