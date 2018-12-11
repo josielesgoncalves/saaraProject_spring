@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/selectBox")
+@RequestMapping(value = "/selectBox")
 public class SelectBoxController {
 
     private final SelectBoxService selectBoxService;
@@ -39,8 +39,8 @@ public class SelectBoxController {
      * @param cursoId id do curso
      * @return lista de materias relacionadas ao curso
      */
-    @GetMapping("/getMaterias")//TODO: BUSCAR MATERIAS POR CURSO E SEMESTRE
-    public ResponseEntity<Object> getMaterias(String cursoId)
+    @GetMapping("/getMateriasCurso/{cursoId}")//TODO: BUSCAR MATERIAS POR CURSO E SEMESTRE
+    public ResponseEntity<Object> getMaterias(@PathVariable String cursoId)
     {
         return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService
                 .getMaterias(ConverterHelper.convertStringToLong(cursoId))));
@@ -79,10 +79,11 @@ public class SelectBoxController {
      * @param usuarioId id do usuario
      * @return lista de materias que o usuario está cursando
      */
-    @GetMapping("/getMaterias/{usuarioId}")
+    @GetMapping("/getMateriasUsuario/{usuarioId}")
     public ResponseEntity<Object> getMateriasUsuario(@PathVariable String usuarioId)
     {
-        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getMateriasUsuario(ConverterHelper.convertStringToLong(usuarioId))));
+        return ResponseEntity.ok().body(new Resposta(0, "",
+                selectBoxService.getMateriasUsuario(ConverterHelper.convertStringToLong(usuarioId))));
     }
 
     //TODO: criar selectBox para selecionar dia, mes, ano, hora, min e seg

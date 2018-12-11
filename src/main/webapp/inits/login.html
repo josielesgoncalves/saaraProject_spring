@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link type="text/css" rel="stylesheet"
+          href="../materialize/css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="style/logar.css"
+          media="screen,projection" />
+    <link type="text/css" rel="stylesheet"
+          href="../bootstrap/css/bootstrap.min.css" media="screen,projection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script type="text/javascript" src="../materialize/js/materialize.min.js"></script>
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="row" id="rowTelaToda">
+    <div class="col s6 push-s3 pull-s3" id="containerLogin">
+        <div id="contentLogin">
+            <div align="center" id="logoLogin">
+                <img src="../img/logo.png" id="imgLogo">
+            </div>
+            <div id="containerForm">
+                <form class="col s8 push-s2 pull-s2" action="Login" method="post"
+                      id="formLogin">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="email" name="email" type="email" class="validate"
+                                   required="required"> <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="senha" name="senha" type="password" class="validate"
+                                   required="required"> <label for="senha">Senha</label>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <button class="btn waves-effect waves-light" name="action"
+                                type="submit">Entrar</button>
+                    </div>
+                    <div class="center">
+                        <a href="cadastrar.html">Cadastrar</a>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
