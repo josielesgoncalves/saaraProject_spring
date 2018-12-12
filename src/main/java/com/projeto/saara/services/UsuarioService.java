@@ -5,13 +5,11 @@ import com.projeto.saara.dto.output.UsuarioMateriaDTO;
 import com.projeto.saara.dto.input.NewLembreteDTO;
 import com.projeto.saara.dto.input.NewUsuarioDTO;
 import com.projeto.saara.entities.*;
+import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.exceptions.ParametroInvalidoException;
 import com.projeto.saara.helpers.ConverterHelper;
-import com.projeto.saara.repositories.interfaces.CursoRepository;
-import com.projeto.saara.repositories.interfaces.LembreteRepository;
-import com.projeto.saara.repositories.interfaces.MateriaRepository;
-import com.projeto.saara.repositories.interfaces.UsuarioRepository;
+import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +27,24 @@ public class UsuarioService {
 
     private final LembreteRepository lembreteRepository;
 
+    private final NotaRepository notaRepository;
+
+    private final UsuarioMateriaRepository usuarioMateriaRepository;
+
+
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository,
                           CursoRepository cursoRepository,
                           MateriaRepository materiaRepository,
-                          LembreteRepository lembreteRepository) {
+                          LembreteRepository lembreteRepository,
+                          NotaRepository notaRepository,
+                          UsuarioMateriaRepository usuarioMateriaRepository) {
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
         this.materiaRepository = materiaRepository;
         this.lembreteRepository = lembreteRepository;
+        this.notaRepository = notaRepository;
+        this.usuarioMateriaRepository = usuarioMateriaRepository;
     }
 
     public UsuarioDTO logar(String email, String senha) {
@@ -83,32 +90,57 @@ public class UsuarioService {
 
     /**
      * Salva os dados do usuario com as materias cursadas ou cursando
-     *
-     * @param usuarioDTO usuarioDTO
-     * @param dtoList    lista de dados da materia selecionada
+     * @param dto
      */
-    public void cadastrarMaterias(NewUsuarioDTO usuarioDTO, List<UsuarioMateriaDTO> dtoList) {
+    public void cadastrarMateria(UsuarioMateriaDTO dto) {
 
-        Usuario usuario = usuarioRepository.findUsuarioByEmail(usuarioDTO.getEmail()).orElseThrow(() ->
-                new ObjetoNaoEncontradoException(
-                        "O usuario de email \"" + usuarioDTO.getEmail() + "\" não foi encontrado"));
+        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
+                .convertStringToLong(dto.getUsuarioId())).orElseThrow(() ->
+                new ObjetoNaoEncontradoException("O usuario não foi encontrado"));
 
         List<UsuarioMateria> usuarioMaterias = new ArrayList<>();
-
-        //Nesse caso o usuario pode não salvar as matérias que não cursou
-        for (UsuarioMateriaDTO item : dtoList) {
-            Materia materia = materiaRepository.getMateriaById(
-                    ConverterHelper.convertStringToLong(item.getMateriaId())).orElseThrow(() ->
-                        new ObjetoNaoEncontradoException(
-                            "A materia de id \"" + item.getMateriaId() + "\" não foi encontrada"));
-
-            Long statusId = ConverterHelper.convertStringToLong(item.getStatusId());
-            UsuarioMateria usuarioMateria = new UsuarioMateria();
-            usuarioMateria.setMateria(materia);
-            usuarioMateria.setStatus(statusId);
-
-            usuarioMaterias.add(usuarioMateria);
+        if(null != usuario.getMaterias()){
+            usuarioMaterias = usuario.getMaterias();
         }
+
+        Materia materia = materiaRepository.getMateriaById(
+                ConverterHelper.convertStringToLong(dto.getMateriaId())).orElseThrow(() ->
+                        new ObjetoNaoEncontradoException("A materia não foi encontrada"));
+
+        Long statusId = ConverterHelper.convertStringToLong(dto.getStatusId());
+        UsuarioMateria usuarioMateria = new UsuarioMateria();
+        usuarioMateria.setMateria(materia);
+        usuarioMateria.setStatus(statusId);
+        usuarioMateria.setUsuario(usuario);
+
+        List<Nota> notas = null;
+        Nota nota = null;
+        if(!dto.getNota().equals("") || dto.getNota()!= null) {
+            nota = new Nota();
+            nota.setUsuarioMateria(usuarioMateria);
+            notas = new ArrayList<>();
+            double valor = ConverterHelper.convertStringToDouble(dto.getNota());
+            nota.setValor(valor);
+        }
+        if(!dto.getPeso().equals("") || dto.getPeso() != null) {
+            double peso = ConverterHelper.convertStringToDouble(dto.getPeso());
+            nota.setPesoNota(peso);
+        }
+        if(!dto.getNotaType().equals("") || dto.getNotaType() != null){
+            NotaTypeEnum notaTypeEnum = ConverterHelper.convertIdToNotaTypeEnum
+                    (ConverterHelper.convertStringToLong(dto.getNotaType()));
+            nota.setTipo(notaTypeEnum .getId());
+        }
+        if(nota != null){
+            if(notas != null)
+                notas.add(nota);
+        }
+
+        usuarioMateria.setNotas(notas);
+        usuarioMateriaRepository.saveAndFlush(usuarioMateria);
+        notaRepository.saveAndFlush(nota);
+
+        usuarioMaterias.add(usuarioMateria);
         usuario.setMaterias(usuarioMaterias);
 
         usuarioRepository.saveAndFlush(usuario);

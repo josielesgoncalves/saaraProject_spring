@@ -3,6 +3,7 @@ package com.projeto.saara.services;
 import com.projeto.saara.dto.output.SelectBoxDTO;
 import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.LembreteTypeEnum;
+import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
@@ -152,6 +153,18 @@ public class SelectBoxService {
                     )
             );
         }
+        return selectBoxList;
+    }
+
+    public List<SelectBoxDTO> getNotaType() {
+        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
+
+        for (NotaTypeEnum type : NotaTypeEnum.values()) {
+            selectBoxList.add(new SelectBoxDTO(
+                            ConverterHelper.convertLongToString(type.getId()),
+                            type.getDescricao()));
+        }
+
         return selectBoxList;
     }
 }

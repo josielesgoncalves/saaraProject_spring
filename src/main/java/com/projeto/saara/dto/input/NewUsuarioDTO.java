@@ -25,9 +25,6 @@ public class NewUsuarioDTO implements Serializable {
     @NotBlank(message = "Preencimento obrigatorio")
     private String senha;
 
-    @NotBlank(message = "Preencimento obrigatorio")
-    private String confirmSenha;
-
     private List<String> materias;
 
     public Usuario criarNovoUsuario() {

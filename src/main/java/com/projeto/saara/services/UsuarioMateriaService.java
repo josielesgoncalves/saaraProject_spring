@@ -223,4 +223,36 @@ public class UsuarioMateriaService {
         aula.setProfessor(dto.getProfessor());
         aulaRepository.saveAndFlush(aula);
     }
+
+    public List<AulaDTO> getAulas(Long usuarioId) {
+        List<AulaDTO> aulas = new ArrayList<>();
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "Usuario não encontrado"));
+
+        List<UsuarioMateria> materias = null;
+        if(usuario.getMaterias() != null)
+            materias = usuario.getMaterias();
+
+        if(materias != null){
+            for (UsuarioMateria usuarioMateria: materias){
+                if(usuarioMateria.getMateria() != null)
+                    for (Aula aula : usuarioMateria.getMateria().getAulas()){
+                        if (aula.getUsuario() == usuario){
+                            AulaDTO aulaDTO = new AulaDTO();
+                            aulaDTO.setDia(ConverterHelper.convertIdToDiaEnum(aula.getDia()
+                            ).getDescricao());
+                            aulaDTO.setProfessor(aula.getProfessor());
+                            aulaDTO.setLocal(aula.getLocal());
+                            aulaDTO.setHorario(aula.getHorario());
+
+                            aulas.add(aulaDTO);
+                        }
+                    }
+            }
+        }
+
+
+        return aulas;
+    }
 }

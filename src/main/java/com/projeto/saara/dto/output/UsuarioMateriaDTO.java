@@ -16,6 +16,12 @@ public class UsuarioMateriaDTO implements Serializable {
 
     private List<NotaDTO> notaDTOList;
 
+    private String nota;
+
+    private String notaType;
+
+    private String peso;
+
     private String statusId;
 
     private String media;

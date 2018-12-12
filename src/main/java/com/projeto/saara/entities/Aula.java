@@ -26,4 +26,7 @@ public class Aula implements Serializable {
 
     @Column(name = "DIA")
     private Long dia;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    private Usuario usuario;
 }

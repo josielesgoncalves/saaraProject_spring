@@ -56,9 +56,9 @@ public class UsuarioController {
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
-    @PostMapping("/cadastrar/materias")
-    public ResponseEntity<Object> cadastrarMaterias(NewUsuarioDTO dto, List<UsuarioMateriaDTO> idList) {
-        usuarioService.cadastrarMaterias(dto, idList);
+    @PostMapping("/cadastrar/materia")
+    public ResponseEntity<Object> cadastrarMaterias(@RequestBody UsuarioMateriaDTO dto) {
+        usuarioService.cadastrarMateria(dto);
 
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
@@ -185,11 +185,11 @@ public class UsuarioController {
      * @param usuarioMateriaId usuariomateriaID
      * @return lista de aulas da matéria selecionada
      */
-    @GetMapping("/getAulasMateria")
-    public ResponseEntity<Object> getAulasMateria(String usuarioMateriaId) {
+    @GetMapping("/getAulasMateria/{usuarioMateriaId}")
+    public ResponseEntity<List<AulaDTO>> getAulasMateria(String usuarioMateriaId) {
 
         List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulasMateria(ConverterHelper.convertStringToLong(usuarioMateriaId));
-        return ResponseEntity.ok().body(new Resposta(0, "", aulaDTOS));
+        return ResponseEntity.ok().body(aulaDTOS);
     }
 
     @PostMapping("/adicionarAula")
@@ -204,4 +204,12 @@ public class UsuarioController {
         usuarioMateriaService.atualizarAula(ConverterHelper.convertStringToLong(aulaId), dto);
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
+
+    @GetMapping("/getAulas/{usuarioId}")
+    public ResponseEntity<List<AulaDTO>> getAulas(String usuarioId) {
+
+        List<AulaDTO> aulaDTOS = usuarioMateriaService.getAulas(ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(aulaDTOS);
+    }
+
 }

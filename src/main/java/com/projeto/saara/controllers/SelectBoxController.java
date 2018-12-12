@@ -40,10 +40,13 @@ public class SelectBoxController {
      * @return lista de materias relacionadas ao curso
      */
     @GetMapping("/getMateriasCurso/{cursoId}")//TODO: BUSCAR MATERIAS POR CURSO E SEMESTRE
-    public ResponseEntity<Object> getMaterias(@PathVariable String cursoId)
+    public ResponseEntity<List<SelectBoxDTO>> getMaterias(@PathVariable String cursoId)
     {
-        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService
-                .getMaterias(ConverterHelper.convertStringToLong(cursoId))));
+        List<SelectBoxDTO> list = selectBoxService
+                .getMaterias(ConverterHelper.convertStringToLong(cursoId));
+        Resposta resp = new Resposta(0, "", list);
+
+        return ResponseEntity.ok().body(list);
     }
 
     /**
@@ -51,9 +54,10 @@ public class SelectBoxController {
      * ao usuario
      */
     @GetMapping("/getStatusMateria")
-    public ResponseEntity<Object> getStatusMateria()
+    public ResponseEntity<List<SelectBoxDTO>> getStatusMateria()
     {
-        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getStatusMateria()));
+        List<SelectBoxDTO> list = selectBoxService.getStatusMateria();
+        return ResponseEntity.ok().body(list);
     }
 
     /**
@@ -70,10 +74,20 @@ public class SelectBoxController {
      * @return lista de tipos de lembretes
      */
     @GetMapping("/getLembreteType")
-    public ResponseEntity<Object> getLembreteType()
+    public ResponseEntity<List<SelectBoxDTO>> getLembreteType()
     {
-        return ResponseEntity.ok().body(new Resposta(0, "", selectBoxService.getLembreteType()));
+        return ResponseEntity.ok().body(selectBoxService.getLembreteType());
     }
+
+    /**
+     * @return lista de tipos de notas
+     */
+    @GetMapping("/getNotaType")
+    public ResponseEntity<List<SelectBoxDTO>> getNotaType()
+    {
+        return ResponseEntity.ok().body(selectBoxService.getNotaType());
+    }
+
 
     /**
      * @param usuarioId id do usuario
