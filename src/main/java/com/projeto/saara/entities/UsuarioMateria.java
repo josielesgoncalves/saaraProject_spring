@@ -22,7 +22,7 @@ public class UsuarioMateria implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
     private Usuario usuario;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Nota.class)
     private List<Nota> notas;
 
     @Column(name = "STATUS")

@@ -1,6 +1,7 @@
 package com.projeto.saara.services;
 
 import com.projeto.saara.dto.output.LembreteDTO;
+import com.projeto.saara.dto.output.MateriaDTO;
 import com.projeto.saara.entities.Lembrete;
 import com.projeto.saara.entities.Usuario;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
@@ -35,7 +36,7 @@ public class LembreteService {
         List<Lembrete> lembretes = lembreteRepository.findLembreteByUsuario(usuario).orElseThrow(() ->
                 new ObjetoNaoEncontradoException("Os lembretes do usuario \"" + usuario.getNome() + "\" não foram encontrados"));
 
-        for (Lembrete lembrete : lembretes) { //TODO fazer isso aqui com o mapper
+        for (Lembrete lembrete : lembretes) { //TODO fazer isso aqui com o mapper?
             LembreteDTO lembreteDTO = new LembreteDTO();
             lembreteDTO.setTipo(ConverterHelper.convertIdToLembreteTypeEnum(lembrete
                     .getTipo()).getDescricao());
@@ -48,8 +49,9 @@ public class LembreteService {
                         .getData()));
             }
             if (lembrete.getMateria() != null) {
-                lembreteDTO.setMateriaId(ConverterHelper.convertLongToString
-                        (lembrete.getMateria().getId()));
+                lembreteDTO.setMateriaDTO(
+                        new MateriaDTO(lembrete.getMateria().getId().toString(), lembrete.getMateria().getNome())
+                );
             }
 
             lembreteDTOS.add(lembreteDTO);
@@ -77,8 +79,9 @@ public class LembreteService {
                     .getData()));
         }
         if (lembrete.getMateria() != null) {
-            lembreteDTO.setMateriaId(ConverterHelper.convertLongToString
-                    (lembrete.getMateria().getId()));
+            lembreteDTO.setMateriaDTO(
+                    new MateriaDTO(lembrete.getMateria().getId().toString(), lembrete.getMateria().getNome())
+            );
         }
 
         return lembreteDTO;

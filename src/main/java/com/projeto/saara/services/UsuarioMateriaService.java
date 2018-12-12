@@ -1,9 +1,7 @@
 package com.projeto.saara.services;
 
 import com.projeto.saara.dto.input.NewAulaDTO;
-import com.projeto.saara.dto.output.AulaDTO;
-import com.projeto.saara.dto.output.NotaDTO;
-import com.projeto.saara.dto.output.UsuarioMateriaDTO;
+import com.projeto.saara.dto.output.*;
 import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
@@ -42,7 +40,7 @@ public class UsuarioMateriaService {
         this.materiaRepository = materiaRepository;
     }
 
-    public /*List<UsuarioMateriaDTO>*/ List<UsuarioMateria> getUsuarioMaterias(long usuarioId) {
+    public List<UsuarioMateriaDTO>/*List<UsuarioMateria> */getUsuarioMaterias(long usuarioId) {
 
         List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
 
@@ -55,16 +53,22 @@ public class UsuarioMateriaService {
                         new ObjetoNaoEncontradoException(
                                 "As usuariomMateria do usuario \"" + usuarioId + "\" não foram encontradas"));
 
-        /*for (UsuarioMateria uMateria : usuarioMaterias) {
+        for (UsuarioMateria uMateria : usuarioMaterias) {
 
             UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
-            usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
-                    (uMateria.getMateria().getId()));
-            usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString(usuarioId));
-            usuarioMateriaDTO.setStatusId(ConverterHelper.convertIdToStatusEnum(uMateria.getStatus())
-                    .getDescricao());
-            usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString
-                    (uMateria.getMedia()));
+            usuarioMateriaDTO.setMateriaDTO(
+                    new MateriaDTO(uMateria.getMateria().getId().toString(),uMateria.getMateria().getNome())
+            );
+            usuarioMateriaDTO.setUsuarioDTO(
+                    new UsuarioDTO(usuario.getId().toString(),
+                            usuario.getNome(),
+                            usuario.getEmail(),
+                            usuario.getCurso().getId().toString(),
+                            null,
+                            null)
+            );
+            usuarioMateriaDTO.setStatusId(ConverterHelper.convertIdToStatusEnum(uMateria.getStatus()).getDescricao());
+            usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString(uMateria.getMedia()));
 
             List<Nota> notas = notaRepository.findNotasByUsuarioMateria(uMateria).orElse(new ArrayList<>());
 
@@ -74,8 +78,8 @@ public class UsuarioMateriaService {
             }
 
             usuarioMateriaDTOS.add(usuarioMateriaDTO);
-        }*/
-        return usuarioMaterias;
+        }
+        return usuarioMateriaDTOS;
     }
 
     public UsuarioMateriaDTO getUsuarioMateria(long usuarioMateriaId) {
@@ -87,10 +91,17 @@ public class UsuarioMateriaService {
                         new ObjetoNaoEncontradoException(
                                 "Aa usuariomMateria de id \"" + usuarioMateriaId + "\" não foi encontrada"));
 
-        usuarioMateriaDTO.setMateriaId(ConverterHelper.convertLongToString
-                (usuarioMateria.getMateria().getId()));
-        usuarioMateriaDTO.setUsuarioId(ConverterHelper.convertLongToString
-                (usuarioMateria.getUsuario().getId()));
+        usuarioMateriaDTO.setMateriaDTO(
+                new MateriaDTO(usuarioMateria.getMateria().getId().toString(),usuarioMateria.getMateria().getNome())
+        );
+        usuarioMateriaDTO.setUsuarioDTO(
+                new UsuarioDTO(usuarioMateria.getUsuario().getId().toString(),
+                        usuarioMateria.getUsuario().getNome(),
+                        usuarioMateria.getUsuario().getEmail(),
+                        usuarioMateria.getUsuario().getCurso().getId().toString(),
+                        null,
+                        null)
+        );
         usuarioMateriaDTO.setStatusId(ConverterHelper.convertIdToStatusEnum(usuarioMateria.getStatus())
                 .getDescricao());
         usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString

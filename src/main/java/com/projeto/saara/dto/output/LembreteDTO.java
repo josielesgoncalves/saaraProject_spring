@@ -17,7 +17,7 @@ public class LembreteDTO implements Serializable {
 
     private String data;
 
-    private String materiaId;
+    private MateriaDTO materiaDTO;
 
-    private String usuarioId;
+    private UsuarioDTO usuarioDTO;
 }

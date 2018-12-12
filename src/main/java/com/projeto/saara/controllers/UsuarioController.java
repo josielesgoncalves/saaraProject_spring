@@ -88,8 +88,8 @@ public class UsuarioController {
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
-    @GetMapping("/getLembretes")
-    public ResponseEntity<Object> getLembretes(String usuarioId) {
+    @PostMapping("/getLembretes")
+    public ResponseEntity<Object> getLembretes(@RequestParam(value = "usuarioId") String usuarioId) {
 
         List<LembreteDTO> lembretesDto = lembreteService.getLembretes(ConverterHelper.convertStringToLong(usuarioId));
         return ResponseEntity.ok().body(new Resposta(0, "", lembretesDto));
@@ -109,7 +109,7 @@ public class UsuarioController {
     @PostMapping("/getMaterias")
     public ResponseEntity<Object> getMaterias(@RequestParam(value = "usuarioId") String usuarioId) {
 
-        List<UsuarioMateria> dto = usuarioMateriaService.getUsuarioMaterias(ConverterHelper.convertStringToLong(usuarioId));
+        List<UsuarioMateriaDTO> dto = usuarioMateriaService.getUsuarioMaterias(ConverterHelper.convertStringToLong(usuarioId));
         return ResponseEntity.ok().body(new Resposta(0, "", dto));
     }
 

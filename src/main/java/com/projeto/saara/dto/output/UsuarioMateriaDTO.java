@@ -1,18 +1,22 @@
 package com.projeto.saara.dto.output;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuarioMateriaDTO implements Serializable {
 
     private String usuarioMateriaId;
 
-    private String materiaId;
+    private MateriaDTO materiaDTO;
 
-    private String usuarioId;
+    private UsuarioDTO usuarioDTO;
 
     private List<NotaDTO> notaDTOList;
 

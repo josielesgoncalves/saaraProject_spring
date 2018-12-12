@@ -94,9 +94,9 @@ public class UsuarioService {
      */
     public void cadastrarMateria(UsuarioMateriaDTO dto) {
 
-        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
-                .convertStringToLong(dto.getUsuarioId())).orElseThrow(() ->
-                new ObjetoNaoEncontradoException("O usuario não foi encontrado"));
+        Usuario usuario = usuarioRepository.findUsuarioById(
+                ConverterHelper.convertStringToLong(dto.getUsuarioDTO().getUsuarioId())).orElseThrow(() ->
+                    new ObjetoNaoEncontradoException("O usuario não foi encontrado"));
 
         List<UsuarioMateria> usuarioMaterias = new ArrayList<>();
         if(null != usuario.getMaterias()){
@@ -104,7 +104,7 @@ public class UsuarioService {
         }
 
         Materia materia = materiaRepository.getMateriaById(
-                ConverterHelper.convertStringToLong(dto.getMateriaId())).orElseThrow(() ->
+                ConverterHelper.convertStringToLong(dto.getMateriaDTO().getMateriaId())).orElseThrow(() ->
                         new ObjetoNaoEncontradoException("A materia não foi encontrada"));
 
         Long statusId = ConverterHelper.convertStringToLong(dto.getStatusId());

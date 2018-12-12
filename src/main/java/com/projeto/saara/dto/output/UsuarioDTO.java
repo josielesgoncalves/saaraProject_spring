@@ -18,7 +18,7 @@ public class UsuarioDTO implements Serializable {
 
     private String email;
 
-    private String cursoId;
+    private String cursoId;//TODO curso
 
     private String senha;
 
