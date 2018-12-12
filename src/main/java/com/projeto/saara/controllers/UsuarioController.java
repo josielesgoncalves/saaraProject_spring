@@ -76,14 +76,13 @@ public class UsuarioController {
     }
 
     /**
-     * @param usuarioId propriedade de UsuarioDTO
+     * @param dto UsuarioDTO
      * @return vazio
      */
     @PostMapping("/adicionarLembrete")
-    public ResponseEntity<Object> adicionarLembrete(
-            String usuarioId, String materiaId, @Valid @RequestBody NewLembreteDTO dto) {
+    public ResponseEntity<Object> adicionarLembrete(@Valid @RequestBody NewLembreteDTO dto) {
 
-        usuarioService.adicionarLembrete(ConverterHelper.convertStringToLong(usuarioId), ConverterHelper.convertStringToLong(materiaId), dto);
+        usuarioService.adicionarLembrete(dto);
 
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
@@ -193,9 +192,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/adicionarAula")
-    public ResponseEntity<Object> adicionarAula(String usuarioMateriaId, @Valid
-    @RequestBody NewAulaDTO dto) {
-        usuarioMateriaService.adicionarAula(ConverterHelper.convertStringToLong(usuarioMateriaId), dto);
+    public ResponseEntity<Object> adicionarAula(@Valid @RequestBody NewAulaDTO dto) {
+        usuarioMateriaService.adicionarAula(dto);
         return ResponseEntity.ok().body(new Resposta(0, "", ""));
     }
 
@@ -212,4 +210,27 @@ public class UsuarioController {
         return ResponseEntity.ok().body(aulaDTOS);
     }
 
+    @GetMapping("/getMateriasCursadas/{usuarioId}")
+    public ResponseEntity<List<UsuarioMateriaDTO>> getMateriasCursadas(String usuarioId) {
+
+        List<UsuarioMateriaDTO> materiasDTOS = usuarioMateriaService.getMateriasCursadas
+                (ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(materiasDTOS);
+    }
+
+    @GetMapping("/getMateriasCursando/{usuarioId}")
+    public ResponseEntity<List<UsuarioMateriaDTO>> getMateriasCursando(String usuarioId) {
+
+        List<UsuarioMateriaDTO> materiasDTOS = usuarioMateriaService.getMateriasCursando
+                (ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(materiasDTOS);
+    }
+
+    @GetMapping("/getMateriasNaoCursadas/{usuarioId}")
+    public ResponseEntity<List<UsuarioMateriaDTO>> getMateriasNaoCursadas(String usuarioId) {
+
+        List<UsuarioMateriaDTO> materiasDTOS = usuarioMateriaService.getMateriasNaoCursadas
+                (ConverterHelper.convertStringToLong(usuarioId));
+        return ResponseEntity.ok().body(materiasDTOS);
+    }
 }

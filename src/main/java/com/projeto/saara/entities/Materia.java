@@ -12,13 +12,13 @@ import java.util.List;
 public class Materia implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "NOME")
     private String nome;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
     private List<Aula> aulas;
 }

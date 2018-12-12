@@ -45,8 +45,8 @@ public class LembreteService {
                 lembreteDTO.setTexto(lembrete.getTexto());
             }
             if (lembrete.getData() != null) {
-                lembreteDTO.setData(ConverterHelper.convertCalendarToString(lembrete
-                        .getData()));
+                lembreteDTO.setData(lembrete
+                        .getData());
             }
             if (lembrete.getMateria() != null) {
                 lembreteDTO.setMateriaDTO(
@@ -75,8 +75,7 @@ public class LembreteService {
             lembreteDTO.setTexto(lembrete.getTexto());
         }
         if (lembrete.getData() != null) {
-            lembreteDTO.setData(ConverterHelper.convertCalendarToString(lembrete
-                    .getData()));
+            lembreteDTO.setData(lembrete.getData());
         }
         if (lembrete.getMateria() != null) {
             lembreteDTO.setMateriaDTO(

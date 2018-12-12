@@ -31,7 +31,7 @@ public class NewLembreteDTO implements Serializable {
 
     private String usuarioId;
 
-    public Lembrete criarLembrete() { //TODO ?
+    public Lembrete criarLembrete() {
         Lembrete lembrete = new Lembrete();
 
         if (this.getTipo() == null)
@@ -44,7 +44,7 @@ public class NewLembreteDTO implements Serializable {
             throw new ParametroInvalidoException("Assunto nulo");
 
         lembrete.setAssunto(this.assunto);
-        lembrete.setData(ConverterHelper.convertStringToCalendar(this.data));
+        lembrete.setData(this.data);
         lembrete.setTexto(this.getTexto());
 
         return lembrete;

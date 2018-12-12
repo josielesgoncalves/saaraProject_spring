@@ -11,14 +11,14 @@ import java.io.Serializable;
 public class MateriaCurso implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Materia.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Materia.class, cascade= CascadeType.ALL)
     private Materia materia;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Curso.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Curso.class, cascade= CascadeType.ALL)
     private Curso curso;
 
     @Column(name = "SEMESTRE")

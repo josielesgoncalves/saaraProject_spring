@@ -2,14 +2,20 @@ package com.projeto.saara.services;
 
 import com.projeto.saara.dto.input.NewAulaDTO;
 import com.projeto.saara.dto.output.*;
+import com.projeto.saara.dto.output.AulaDTO;
+import com.projeto.saara.dto.output.MateriaDTO;
+import com.projeto.saara.dto.output.NotaDTO;
+import com.projeto.saara.dto.output.UsuarioMateriaDTO;
 import com.projeto.saara.entities.*;
 import com.projeto.saara.enums.DiaEnum;
+import com.projeto.saara.enums.StatusEnum;
 import com.projeto.saara.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.exceptions.ValidationException;
 import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +33,21 @@ public class UsuarioMateriaService {
 
     private final MateriaRepository materiaRepository;
 
+    private final MateriaCursoRepository materiaCursoRepository;
+
     @Autowired
     public UsuarioMateriaService(UsuarioMateriaRepository usuarioMateriaRepository,
                                  UsuarioRepository usuarioRepository,
                                  NotaRepository notaRepository,
                                  AulaRepository aulaRepository,
-                                 MateriaRepository materiaRepository) {
+                                 MateriaRepository materiaRepository,
+                                 MateriaCursoRepository materiaCursoRepository) {
         this.usuarioMateriaRepository = usuarioMateriaRepository;
         this.usuarioRepository = usuarioRepository;
         this.notaRepository = notaRepository;
         this.aulaRepository = aulaRepository;
         this.materiaRepository = materiaRepository;
+        this.materiaCursoRepository = materiaCursoRepository;
     }
 
     public List<UsuarioMateriaDTO>/*List<UsuarioMateria> */getUsuarioMaterias(long usuarioId) {
@@ -82,6 +92,7 @@ public class UsuarioMateriaService {
         return usuarioMateriaDTOS;
     }
 
+    @Transactional
     public UsuarioMateriaDTO getUsuarioMateria(long usuarioMateriaId) {
 
         UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
@@ -137,6 +148,7 @@ public class UsuarioMateriaService {
         return notaDTOS;
     }
 
+    @Transactional
     public void atualizaStatusUsuarioMateria(long usuarioMateriaId, UsuarioMateriaDTO dto) {
 
         UsuarioMateria usuarioMateria =
@@ -151,6 +163,7 @@ public class UsuarioMateriaService {
     }
 
     //getAulas por dia
+    @Transactional
     public List<AulaDTO> getAulasDia(long usuarioId, long diaId) {
 
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
@@ -174,6 +187,7 @@ public class UsuarioMateriaService {
     }
 
     //getAulas por materia
+    @Transactional
     public List<AulaDTO> getAulasMateria(long usuarioMateriaId) {
 
         UsuarioMateria usuarioMateria =
@@ -201,17 +215,24 @@ public class UsuarioMateriaService {
         return aulaDTO;
     }
 
-    public void adicionarAula(Long usuarioMateriaId, NewAulaDTO dto) {
+    @Transactional
+    public void adicionarAula(NewAulaDTO dto) {
 
-        UsuarioMateria usuarioMateria =
-                usuarioMateriaRepository.findUsuarioMateriaById(usuarioMateriaId).orElseThrow(() ->
-                        new ObjetoNaoEncontradoException(
-                                "Usuario_materia de id \"" + usuarioMateriaId + "\" " +
-                                        "não foi encontrado"));
+        Usuario usuario =
+                usuarioRepository.findUsuarioById(ConverterHelper
+                        .convertStringToLong(dto.getUsuarioId()))
+                        .orElseThrow(() ->
+                                new ObjetoNaoEncontradoException(
+                                        "Usuario nao encontrado"));
 
-        Materia materia = usuarioMateria.getMateria();
+        Materia materia = materiaRepository.findById(ConverterHelper
+                .convertStringToLong(dto.getMateriaId())).orElseThrow(() ->
+                new ObjetoNaoEncontradoException(
+                        "Matéria nao encontrada"));
+
         Aula aula = new Aula();
 
+        aula.setUsuario(usuario);
         aula.setDia(ConverterHelper.convertStringToLong(dto.getDiaSemanaId()));
         aula.setHorario(dto.getHorario());
         aula.setLocal(dto.getLocal());
@@ -222,6 +243,7 @@ public class UsuarioMateriaService {
         materiaRepository.saveAndFlush(materia);
     }
 
+    @Transactional
     public void atualizarAula(Long aulaId, AulaDTO dto) {
 
         Aula aula = aulaRepository.findAulaById(aulaId).orElseThrow(() ->
@@ -235,6 +257,7 @@ public class UsuarioMateriaService {
         aulaRepository.saveAndFlush(aula);
     }
 
+    @Transactional
     public List<AulaDTO> getAulas(Long usuarioId) {
         List<AulaDTO> aulas = new ArrayList<>();
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
@@ -242,28 +265,103 @@ public class UsuarioMateriaService {
                         "Usuario não encontrado"));
 
         List<UsuarioMateria> materias = null;
-        if(usuario.getMaterias() != null)
+        if (usuario.getMaterias() != null)
             materias = usuario.getMaterias();
 
-        if(materias != null){
-            for (UsuarioMateria usuarioMateria: materias){
-                if(usuarioMateria.getMateria() != null)
-                    for (Aula aula : usuarioMateria.getMateria().getAulas()){
-                        if (aula.getUsuario() == usuario){
+        if (materias != null) {
+            for (UsuarioMateria usuarioMateria : materias) {
+                if (usuarioMateria.getMateria() != null)
+                    for (Aula aula : usuarioMateria.getMateria().getAulas()) {
+                        if (aula.getUsuario() == usuario) {
                             AulaDTO aulaDTO = new AulaDTO();
                             aulaDTO.setDia(ConverterHelper.convertIdToDiaEnum(aula.getDia()
                             ).getDescricao());
                             aulaDTO.setProfessor(aula.getProfessor());
                             aulaDTO.setLocal(aula.getLocal());
                             aulaDTO.setHorario(aula.getHorario());
-
+                            aulaDTO.setNomeMateria(usuarioMateria.getMateria().getNome());
                             aulas.add(aulaDTO);
                         }
                     }
             }
         }
-
-
         return aulas;
     }
+
+    public List<UsuarioMateriaDTO> getMateriasCursadas(Long usuarioId) {
+        List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
+
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(()
+                -> new ObjetoNaoEncontradoException("Usuario nao encontrado"));
+
+        List<UsuarioMateria> usuarioMaterias = usuario.getMaterias();
+
+        if (usuarioMaterias != null) {
+            usuarioMateriaDTOS = this.getMaterias(usuarioMaterias, usuarioMateriaDTOS,
+                    StatusEnum.CURSADA);
+        }
+        return usuarioMateriaDTOS;
+    }
+
+    public List<UsuarioMateriaDTO> getMateriasCursando(Long usuarioId) {
+        List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
+
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(()
+                -> new ObjetoNaoEncontradoException("Usuario nao encontrado"));
+
+        List<UsuarioMateria> usuarioMaterias = usuario.getMaterias();
+
+        if (usuarioMaterias != null) {
+            usuarioMateriaDTOS = this.getMaterias(usuarioMaterias, usuarioMateriaDTOS,
+                    StatusEnum.CURSANDO);
+        }
+        return usuarioMateriaDTOS;
+    }
+
+    public List<UsuarioMateriaDTO> getMateriasNaoCursadas(Long usuarioId) {
+
+        List<UsuarioMateriaDTO> usuarioMateriaDTOS = new ArrayList<>();
+
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(()
+                -> new ObjetoNaoEncontradoException("Usuario nao encontrado"));
+
+        List<UsuarioMateria> usuarioMaterias = usuario.getMaterias();
+
+        List<MateriaCurso> materias = materiaCursoRepository.findAllByCurso(usuario.getCurso
+                ()).orElseThrow(() -> new ObjetoNaoEncontradoException("Matérias não " +
+                "encontradas"));
+
+        for (UsuarioMateria usuarioMateria : usuarioMaterias) {
+            for (MateriaCurso materiaCurso : materias) {
+                if (usuarioMateria.getStatus().equals(StatusEnum.NAO_CURSADA) ||
+                        usuarioMateria.getMateria().getId() != materiaCurso.getMateria().getId()) {
+                    UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
+                    usuarioMateriaDTO.setNomeMateria(usuarioMateria.getMateria().getNome());
+                    usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString(usuarioMateria
+                            .getMedia()));
+                    usuarioMateriaDTOS.add(usuarioMateriaDTO);
+                }
+            }
+        }
+        return usuarioMateriaDTOS;
+    }
+
+    private List<UsuarioMateriaDTO> getMaterias(List<UsuarioMateria> usuarioMaterias,
+                                                List<UsuarioMateriaDTO> usuarioMateriaDTOS,
+                                                StatusEnum status) {
+
+        for (UsuarioMateria usuarioMateria : usuarioMaterias) {
+            if (usuarioMateria.getStatus().equals(status)) {
+                UsuarioMateriaDTO usuarioMateriaDTO = new UsuarioMateriaDTO();
+                usuarioMateriaDTO.setNomeMateria(usuarioMateria.getMateria().getNome());
+                usuarioMateriaDTO.setMedia(ConverterHelper.convertDoubleToString(usuarioMateria
+                        .getMedia()));
+                usuarioMateriaDTOS.add(usuarioMateriaDTO);
+            }
+        }
+        return usuarioMateriaDTOS;
+    }
+
+
 }
+

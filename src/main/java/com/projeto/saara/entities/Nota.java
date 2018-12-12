@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Nota implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -24,6 +24,6 @@ public class Nota implements Serializable {
     @Column(name = "TIPO")
     private Long tipo;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class, cascade= CascadeType.ALL)
     private UsuarioMateria usuarioMateria;
 }

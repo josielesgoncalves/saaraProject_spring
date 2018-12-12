@@ -35,6 +35,14 @@ public class SelectBoxController {
         return ResponseEntity.ok().body(selectBoxDTOList);
     }
 
+    @GetMapping("/getCurso/{cursoId}")
+    public ResponseEntity<SelectBoxDTO> getCursos(String cursoId) {
+
+        SelectBoxDTO selectBoxDTO = selectBoxService.getCurso(cursoId);
+
+        return ResponseEntity.ok().body(selectBoxDTO);
+    }
+
     /**
      * @param cursoId id do curso
      * @return lista de materias relacionadas ao curso
@@ -86,6 +94,12 @@ public class SelectBoxController {
     public ResponseEntity<List<SelectBoxDTO>> getNotaType()
     {
         return ResponseEntity.ok().body(selectBoxService.getNotaType());
+    }
+
+    @GetMapping("/getDias")
+    public ResponseEntity<List<SelectBoxDTO>> getDias()
+    {
+        return ResponseEntity.ok().body(selectBoxService.getDias());
     }
 
 

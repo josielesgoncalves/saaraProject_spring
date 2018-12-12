@@ -15,4 +15,6 @@ public class AulaDTO implements Serializable {
 
     private String horario;
 
+    private String nomeMateria;
+
 }

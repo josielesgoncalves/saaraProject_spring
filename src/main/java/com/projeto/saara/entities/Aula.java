@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Aula implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -27,6 +27,6 @@ public class Aula implements Serializable {
     @Column(name = "DIA")
     private Long dia;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Usuario.class, cascade= CascadeType.ALL)
     private Usuario usuario;
 }

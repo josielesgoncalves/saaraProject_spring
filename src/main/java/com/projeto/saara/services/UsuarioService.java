@@ -12,6 +12,7 @@ import com.projeto.saara.helpers.ConverterHelper;
 import com.projeto.saara.repositories.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class UsuarioService {
         this.usuarioMateriaRepository = usuarioMateriaRepository;
     }
 
+    @Transactional
     public UsuarioDTO logar(String email, String senha) {
 
         UsuarioDTO dto = null;
@@ -74,6 +76,7 @@ public class UsuarioService {
         return usuarioRepository.findUsuarioByEmail(email).isPresent();
     }
 
+    @Transactional
     public void cadastrarUsuario(NewUsuarioDTO dto) {
         if (!usuarioCadastrado(dto.getEmail())) {
             Usuario usuario = dto.criarNovoUsuario();
@@ -92,6 +95,7 @@ public class UsuarioService {
      * Salva os dados do usuario com as materias cursadas ou cursando
      * @param dto
      */
+    @Transactional
     public void cadastrarMateria(UsuarioMateriaDTO dto) {
 
         Usuario usuario = usuarioRepository.findUsuarioById(
@@ -146,14 +150,19 @@ public class UsuarioService {
         usuarioRepository.saveAndFlush(usuario);
     }
 
-    public void adicionarLembrete(long usuarioId, long materiaId, NewLembreteDTO dto) {
-        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId).orElseThrow(() ->
-                new ObjetoNaoEncontradoException(
-                        "O usuario de id \"" + usuarioId + "\" não foi encontrado"));
+    @Transactional
+    public void adicionarLembrete(NewLembreteDTO dto) {
+        Usuario usuario = usuarioRepository.findUsuarioById(ConverterHelper
+                .convertStringToLong(dto.getUsuarioId()))
+                .orElseThrow(() ->
+                        new ObjetoNaoEncontradoException(
+                                "Usuario não encontrado"));
 
-        Materia materia = materiaRepository.getMateriaById(materiaId).orElseThrow(() ->
-                new ObjetoNaoEncontradoException(
-                        "A materia de id \"" + materiaId + "\" não foi encontrada"));
+        Materia materia = materiaRepository.getMateriaById(ConverterHelper
+                .convertStringToLong(dto.getMateriaId()))
+                .orElseThrow(() ->
+                        new ObjetoNaoEncontradoException(
+                                "Matéria não encontrada"));
 
         if (dto == null) {
             throw new ParametroInvalidoException("lembreteDTO nulo");

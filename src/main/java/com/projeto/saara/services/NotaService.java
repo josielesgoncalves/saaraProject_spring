@@ -13,6 +13,7 @@ import com.projeto.saara.repositories.interfaces.UsuarioMateriaRepository;
 import com.projeto.saara.repositories.interfaces.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class NotaService {
     }
 
 
+    @Transactional
     public NotaDTO getNota(long usuarioMateriaId, long notaId) {
 
         UsuarioMateria usuarioMateria =
@@ -59,6 +61,7 @@ public class NotaService {
         return notaDTO;
     }
 
+    @Transactional
     public void adicionarNota(long usuarioMateriaId, NewNotaDTO dto) {
 
         if (dto == null)

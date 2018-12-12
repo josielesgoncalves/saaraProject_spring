@@ -12,7 +12,7 @@ import java.util.List;
 public class Curso implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -20,6 +20,6 @@ public class Curso implements Serializable {
     private String nome;
 
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Usuario.class)
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Usuario.class, cascade= CascadeType.ALL)
     private List<Usuario> usuarios;
 }

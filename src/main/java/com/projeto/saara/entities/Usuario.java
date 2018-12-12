@@ -12,7 +12,7 @@ import java.util.List;
 public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -25,13 +25,13 @@ public class Usuario implements Serializable {
     @Column(name = "SENHA")
     private String senha;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Curso.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Curso.class, cascade= CascadeType.ALL)
     private Curso curso;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = UsuarioMateria.class, cascade= CascadeType.ALL)
     private List<UsuarioMateria> materias;
 
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = Lembrete.class)
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Lembrete.class, cascade= CascadeType.ALL)
     private List<Lembrete> lembretes;
 
 }

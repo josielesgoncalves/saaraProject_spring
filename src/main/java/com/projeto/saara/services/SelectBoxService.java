@@ -2,6 +2,7 @@ package com.projeto.saara.services;
 
 import com.projeto.saara.dto.output.SelectBoxDTO;
 import com.projeto.saara.entities.*;
+import com.projeto.saara.enums.DiaEnum;
 import com.projeto.saara.enums.LembreteTypeEnum;
 import com.projeto.saara.enums.NotaTypeEnum;
 import com.projeto.saara.enums.StatusEnum;
@@ -72,21 +73,11 @@ public class SelectBoxService {
     public List<SelectBoxDTO> getStatusMateria() {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(StatusEnum.CURSADA.getId()),
-                        StatusEnum.CURSADA.getDescricao()
-                )
-        );
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(StatusEnum.CURSANDO.getId()),
-                        StatusEnum.CURSANDO.getDescricao()
-                )
-        );
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(StatusEnum.NAO_CURSADA.getId()),
-                        StatusEnum.NAO_CURSADA.getDescricao()
-                )
-        );
+        for (StatusEnum type : StatusEnum.values()) {
+            selectBoxList.add(new SelectBoxDTO(
+                    ConverterHelper.convertLongToString(type.getId()),
+                    type.getDescricao()));
+        }
 
         return selectBoxList;
     }
@@ -112,21 +103,11 @@ public class SelectBoxService {
     public List<SelectBoxDTO> getLembreteType() {
         List<SelectBoxDTO> selectBoxList = new ArrayList<>();
 
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(LembreteTypeEnum.PROVA.getId()),
-                        LembreteTypeEnum.PROVA.getDescricao()
-                )
-        );
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(LembreteTypeEnum.TRABALHO.getId()),
-                        LembreteTypeEnum.TRABALHO.getDescricao()
-                )
-        );
-        selectBoxList.add(new SelectBoxDTO(
-                        ConverterHelper.convertLongToString(LembreteTypeEnum.OUTROS.getId()),
-                        LembreteTypeEnum.OUTROS.getDescricao()
-                )
-        );
+        for (LembreteTypeEnum type : LembreteTypeEnum.values()) {
+            selectBoxList.add(new SelectBoxDTO(
+                    ConverterHelper.convertLongToString(type.getId()),
+                    type.getDescricao()));
+        }
 
         return selectBoxList;
     }
@@ -166,5 +147,28 @@ public class SelectBoxService {
         }
 
         return selectBoxList;
+    }
+
+    public List<SelectBoxDTO> getDias() {
+        List<SelectBoxDTO> selectBoxList = new ArrayList<>();
+
+        for (DiaEnum dia: DiaEnum.values()) {
+            selectBoxList.add(new SelectBoxDTO(
+                    ConverterHelper.convertLongToString(dia.getId()),
+                    dia.getDescricao()));
+        }
+
+        return selectBoxList;
+    }
+
+    public SelectBoxDTO getCurso(String cursoId) {
+
+        Curso curso = cursoRepository.findCursoById(ConverterHelper.convertStringToLong
+                (cursoId)).orElseThrow(() -> new ObjetoNaoEncontradoException("Curso " +
+                "não encontrado"));
+
+        return new SelectBoxDTO(ConverterHelper
+                .convertLongToString(curso.getId()), curso.getNome());
+
     }
 }

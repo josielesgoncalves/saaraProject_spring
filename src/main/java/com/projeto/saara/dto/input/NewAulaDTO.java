@@ -17,4 +17,8 @@ public class NewAulaDTO implements Serializable {
      private String horario;
 
      private String local;
+
+     private String materiaId;
+
+     private String usuarioId;
 }

@@ -30,4 +30,6 @@ public class UsuarioMateriaDTO implements Serializable {
 
     private String media;
 
+    private String nomeMateria;
+
 }

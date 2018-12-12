@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class Lembrete implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long id;
 
@@ -26,12 +26,12 @@ public class Lembrete implements Serializable {
     private String texto;
 
     @Column(name = "DATA")
-    private Calendar data;
+    private String data;
 
-    @ManyToOne(targetEntity = Materia.class)
+    @ManyToOne(targetEntity = Materia.class, cascade= CascadeType.ALL)
     private Materia materia;
 
-    @ManyToOne(targetEntity = Usuario.class)
+    @ManyToOne(targetEntity = Usuario.class, cascade= CascadeType.ALL)
     private Usuario usuario;
 
 }
