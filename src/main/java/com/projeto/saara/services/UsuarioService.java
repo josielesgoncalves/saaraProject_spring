@@ -117,7 +117,7 @@ public class UsuarioService {
         usuarioMateria.setStatus(statusId);
         usuarioMateria.setUsuario(usuario);
 
-        List<Nota> notas = null;
+        List<Nota> notas = new ArrayList<>();
         Nota nota = null;
         if(!dto.getNota().equals("") || dto.getNota()!= null) {
             nota = new Nota();
